@@ -12,6 +12,7 @@ import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
 import hs.capstone.tantanbody.R
+import hs.capstone.tantanbody.data.model.YouTubeVideo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

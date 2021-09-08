@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.data
+package hs.capstone.tantanbody.data.model
 
 import com.google.api.client.util.DateTime
 import com.google.api.services.youtube.model.ThumbnailDetails

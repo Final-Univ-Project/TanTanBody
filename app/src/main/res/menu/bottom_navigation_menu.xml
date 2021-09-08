@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/page1"
+        android:id="@+id/tab_record"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Graph"/>
+        android:icon="@drawable/ic_tab_chart_foreground"
+        android:title="기록"/>
     <item
-        android:id="@+id/page2"
+        android:id="@+id/tab_workout"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Youtube"/>
+        android:icon="@drawable/ic_tab_fitness_foreground"
+        android:title="운동"/>
+    <item
+        android:id="@+id/tab_challenge"
+        android:enabled="true"
+        android:icon="@drawable/ic_tab_challenge"
+        android:title="챌린지"/>
+    <item
+        android:id="@+id/tab_meal"
+        android:enabled="true"
+        android:icon="@drawable/ic_tab_meal_foreground"
+        android:title="식단"/>
+    <item
+        android:id="@+id/tab_setting"
+        android:enabled="true"
+        android:icon="@drawable/ic_tab_setting_foreground"
+        android:title="설정"/>
+
 </menu>

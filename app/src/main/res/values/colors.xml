@@ -7,6 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="gray">#ff888888</color>
+
+    <!-- Icon background color -->
+    <color name="ic_email_background">#FFFFFF</color>
+    <color name="ic_lock_background">#FFFFFF</color>
+
+    <color name="ic_tab_chart_background">#FFFFFF</color>
+    <color name="ic_tab_fitness_background">#FFFFFF</color>
+    <color name="ic_tab_meal_background">#FFFFFF</color>
+    <color name="ic_tab_setting_background">#FFFFFF</color>
+
+    <!-- Activity color -->
+    <color name="white_background">@color/white</color>
 </resources>

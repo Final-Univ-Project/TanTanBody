@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
-import com.google.api.services.youtube.model.ThumbnailDetails
 import com.squareup.picasso.Picasso
 import hs.capstone.tantanbody.R
+import hs.capstone.tantanbody.data.model.YouTubeVideo
 
 class YouTubeRecyclerAdapter(val searchResultList: List<SearchResult>?)
     : RecyclerView.Adapter<YouTubeRecyclerAdapter.YouTubeHolder>() {

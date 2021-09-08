@@ -24,18 +24,31 @@ class MainActivity : AppCompatActivity() {
         // 하단 네비게이션 선택하면
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.page1 -> {
+                R.id.tab_record -> {
+                    // 기록 Fragment로 이동
 //                    loadMainFragment(FitnessGraphFragment.newInstance())
 
                     var weights = floatArrayOf(23f, 20f, 30f, 21f, 16f, 26f, 18f)
                     loadMainFragment(WeightGraphFragment.newInstance(weights))
 
-                    Log.d(TAG, "R.id.page1: ${R.id.page1} 선택")
+                    Log.d(TAG, "R.id.tab_record 클릭")
                     true
                 }
-                R.id.page2 -> {
+                R.id.tab_workout -> {
                     loadMainFragment(YoutubeFragment.newInstance())
-                    Log.d(TAG, "R.id.page1: ${R.id.page1} 선택")
+                    Log.d(TAG, "R.id.tab_workout 클릭")
+                    true
+                }
+                R.id.tab_challenge -> {
+                    Log.d(TAG, "R.id.tab_challenge 클릭")
+                    true
+                }
+                R.id.tab_meal -> {
+                    Log.d(TAG, "R.id.tab_meal 클릭")
+                    true
+                }
+                R.id.tab_setting -> {
+                    Log.d(TAG, "R.id.tab_setting 클릭")
                     true
                 }
                 else -> false

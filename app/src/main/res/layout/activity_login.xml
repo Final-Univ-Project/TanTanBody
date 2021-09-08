@@ -2,21 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:background="@android:color/background_light">
 
     <LinearLayout
         android:id="@+id/loginPanel"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="300dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTF"
+            android:hint="@string/login_hint_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:startIconDrawable="@drawable/ic_email_foreground">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idET"
@@ -26,9 +28,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTF2"
+            android:hint="@string/login_hint_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:layout_marginTop="5dp"
+            app:startIconDrawable="@drawable/ic_lock_foreground">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pwET"
@@ -38,17 +42,12 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/GoToMain"
-        android:text="메인페이지로 이동"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loginPanel"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signInGoogle"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/GoToMain"/>
+        android:layout_below="@id/loginPanel"
+        android:layout_marginTop="7dp"/>
 
 </RelativeLayout>
