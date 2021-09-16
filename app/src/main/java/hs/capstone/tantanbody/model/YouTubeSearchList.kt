@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.data
+package hs.capstone.tantanbody.model
 
 import android.content.Context
 import android.util.Log
@@ -12,7 +12,7 @@ import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.data.model.YouTubeVideo
+import hs.capstone.tantanbody.model.data.YouTubeVideo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

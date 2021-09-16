@@ -1,7 +1,6 @@
-package hs.capstone.tantanbody.data.model
+package hs.capstone.tantanbody.model.data
 
 import com.google.api.client.util.DateTime
-import com.google.api.services.youtube.model.ThumbnailDetails
 
 // YouTube 영상
 data class YouTubeVideo(

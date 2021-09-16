@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.data
+package hs.capstone.tantanbody.model
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
 import com.squareup.picasso.Picasso
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.data.model.YouTubeVideo
+import hs.capstone.tantanbody.model.data.YouTubeVideo
 
 class YouTubeRecyclerAdapter(val searchResultList: List<SearchResult>?)
     : RecyclerView.Adapter<YouTubeRecyclerAdapter.YouTubeHolder>() {

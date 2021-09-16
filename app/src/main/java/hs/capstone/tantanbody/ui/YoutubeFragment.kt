@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.services.youtube.model.SearchResult
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.data.YouTubeRecyclerAdapter
-import hs.capstone.tantanbody.data.YouTubeSearchList
+import hs.capstone.tantanbody.model.YouTubeRecyclerAdapter
+import hs.capstone.tantanbody.model.YouTubeSearchList
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 

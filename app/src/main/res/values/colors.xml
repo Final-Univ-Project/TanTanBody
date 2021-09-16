@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#ff888888</color>
+    <color name="orange">#FFFB6340</color>
+    <color name="purple">#FF5E72E4</color>
 
     <!-- Icon background color -->
     <color name="ic_email_background">#FFFFFF</color>
@@ -20,4 +22,7 @@
 
     <!-- Activity color -->
     <color name="white_background">@color/white</color>
+    <color name="black_background">@color/black</color>
+    <color name="unused_content">#FF8898AA</color>
+    <color name="using_content">#FF32325D</color>
 </resources>

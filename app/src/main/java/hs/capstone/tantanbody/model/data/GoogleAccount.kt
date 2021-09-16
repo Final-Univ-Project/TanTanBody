@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.data.model
+package hs.capstone.tantanbody.model.data
 
 import android.net.Uri
 
