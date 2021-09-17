@@ -1,8 +1,8 @@
-package hs.capstone.tantanbody.data
+package hs.capstone.tantanbody.model
 
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import hs.capstone.tantanbody.data.model.GoogleAccount
+import hs.capstone.tantanbody.model.data.GoogleAccount
 
 class GoogleLoginRepository(signIn: GoogleSignInAccount?) {
     val TAG = "GoogleLoginRepository"

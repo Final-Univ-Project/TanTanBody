@@ -1,6 +1,9 @@
 package hs.capstone.tantanbody.ui
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +15,9 @@ import com.github.mikephil.charting.data.BarEntry
 import hs.capstone.tantanbody.R
 
 class FitnessGraphFragment : Fragment() {
+    val TAG = "FitnessGraphFragment"
     lateinit var barChart: BarChart
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,26 +28,44 @@ class FitnessGraphFragment : Fragment() {
 
 
         // BarChart 데이터 가져오기
-        var workoutTimes = mutableListOf(23f, 20f, 30f, 21f, 16f, 26f, 18f)
-        var workoutTimeList = ArrayList<BarEntry>()
-        for (i in 0..6) {
-            workoutTimeList.add(BarEntry(workoutTimes[i], i.toFloat()))
+        var workouts = mapOf(
+            0 to 23f,
+            1 to 20f,
+            2 to 30f,
+            3 to 21f,
+            4 to 16f,
+            5 to 26f,
+            6 to 18f
+        )
+//        var weekday = listOf("월", "화", "수", "목", "금", "토", "일")
+
+        var entries = ArrayList<BarEntry>()
+        workouts.forEach {
+            entries.add(BarEntry(it.key.toFloat(), it.value))
         }
 
-//        var weekday = listOf("월", "화", "수", "목", "금", "토", "일")
-//        var weekdayList = ArrayList<String>()
+//        var weekdayList = ArrayList<BarEntry>()
 //        for (wd in weekday) {
-//            weekdayList.add(wd)
+//            weekdayList.add(BarEntry(wd))
 //        }
 
         // BarChart 설정하기
-        var workoutDS = BarDataSet(workoutTimeList, "운동시간")
-        barChart.animateY(100)
-        barChart.data = BarData(workoutDS)
+        var DSbar = BarDataSet(entries, getString(R.string.graph_label_fitness))
+        DSbar.color = getColorFrom(R.color.orange)
+        DSbar.valueTextColor = getColorFrom(R.color.unused_content)
 
-        // 색, round edge, 한글깨짐? 고치기
+        barChart.xAxis.isEnabled = false
+        barChart.axisRight.isEnabled = false
+        barChart.description.text = "분(minute)"
+        barChart.data = BarData(DSbar)
+        barChart.invalidate() // refresh
 
         return layout
+    }
+
+    @SuppressLint("ResourceType")
+    fun getColorFrom(address: Int): Int {
+        return Color.parseColor(getString(address))
     }
 
     companion object {

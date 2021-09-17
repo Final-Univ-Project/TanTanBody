@@ -2,7 +2,6 @@ package hs.capstone.tantanbody
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -13,11 +12,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import hs.capstone.tantanbody.data.GoogleLoginRepository
-import hs.capstone.tantanbody.data.model.GoogleAccount
+import hs.capstone.tantanbody.model.GoogleLoginRepository
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
+    lateinit var signInBtn: Button
     lateinit var signInGoogle: SignInButton
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -27,10 +26,17 @@ class LogInActivity: Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         signInGoogle = findViewById(R.id.signInGoogle)
+        signInBtn = findViewById(R.id.signInBtn)
+
         signInGoogle.setSize(SignInButton.SIZE_WIDE)
         signInGoogle.setColorScheme(SignInButton.COLOR_DARK)
 
         // Internet 연결되었는지 Check
+
+        signInBtn.setOnClickListener {
+            // 서버에서 check
+            // ViewModel에 저장
+        }
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
