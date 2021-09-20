@@ -18,7 +18,6 @@ class FitnessGraphFragment : Fragment() {
     val TAG = "FitnessGraphFragment"
     lateinit var barChart: BarChart
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
