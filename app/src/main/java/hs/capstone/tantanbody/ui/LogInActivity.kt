@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody
+package hs.capstone.tantanbody.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.GoogleLoginRepository
 
 class LogInActivity: Activity() {
