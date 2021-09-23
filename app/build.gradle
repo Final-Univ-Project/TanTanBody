@@ -61,6 +61,8 @@ dependencies {
     // Picasso (https://square.github.io/picasso/)
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    // MyBatis
+    implementation files('libs/mybatis-3.5.7.jar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.5.0'

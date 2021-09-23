@@ -1,11 +1,11 @@
-package hs.capstone.tantanbody
+package hs.capstone.tantanbody.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import hs.capstone.tantanbody.ui.*
+import hs.capstone.tantanbody.R
 
 class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"

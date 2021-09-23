@@ -7,7 +7,10 @@
     <string name="login_hint_id">Email</string>
     <string name="login_hint_pw">Password</string>
     <string name="sign_in_button">회원가입</string>
+    <string name="fail_email_form">email 형식을 맞추어주세요.</string>
     <!-- RecordActivity -->
+    <string name="goal_title">운동 목표</string>
+    <string name="goal_dialog_title">운동 목표 설정</string>
     <string name="graph_title_fitness">운동 시간 변화</string>
     <string name="graph_title_weight">몸무게 감량 변화</string>
     <string name="graph_label_weight">몸무게 변화량</string>
