@@ -16,14 +16,14 @@ class TantanBodyDatabase {
         fun getDatabase(
             context: Context,
             scope: CoroutineScope
-        ): SqlSessionFactory {
-
-            return INSTANCE ?: synchronized(this) {
-                // 서버와 연결
-                val instance = ConnectToMyBatis.sqlSessionFactory
-                INSTANCE = instance
-                instance
-            }
+        ): SqlSessionFactory? {
+            // DB와 연결할 때 필요한 것들 설정
+            return INSTANCE
+//                ?: synchronized(this) {
+//                val instance = ConnectToMyBatis.sqlSessionFactory
+//                INSTANCE = instance
+//                instance
+//            }
         }
     }
 }
