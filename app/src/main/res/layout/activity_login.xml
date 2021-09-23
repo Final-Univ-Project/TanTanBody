@@ -6,58 +6,11 @@
     android:gravity="center_horizontal"
     android:background="@android:color/background_light">
 
-    <LinearLayout
-        android:id="@+id/loginPanel"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="300dp">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTF"
-            android:hint="@string/login_hint_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_email_foreground">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailEt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTF2"
-            android:hint="@string/login_hint_pw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:startIconDrawable="@drawable/ic_lock_foreground"
-            app:endIconMode="password_toggle">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pwEt"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/signInBtn"
-            android:text="@string/sign_in_button"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/purple"
-            android:layout_marginTop="20dp"/>
-    </LinearLayout>
-
-
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signInGoogle"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginPanel"
-        android:layout_marginTop="7dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"/>
 
 </RelativeLayout>
