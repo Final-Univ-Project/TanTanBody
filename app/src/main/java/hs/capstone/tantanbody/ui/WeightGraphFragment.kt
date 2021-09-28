@@ -8,16 +8,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import androidx.core.view.children
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import hs.capstone.tantanbody.R
 import kotlin.collections.ArrayList
 
 class WeightGraphFragment : Fragment() {
+    val TAG = "WeightGraphFragment"
     lateinit var lineChart: LineChart
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+//        recordedViewModel.userWeights.observe(this, Observer {
+//            weights.let {
+//                // UI 업데이트
+//                Log.d(TAG, "recordedViewModel.userWeights: ${it}\n 추가된 weight에 따라 UI 변화")
+//            }
+//        })
+
+        Log.d(TAG, "weights: ${weights}")
+    }
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -29,15 +40,15 @@ class WeightGraphFragment : Fragment() {
 
 
         // LineChart 데이터 가져오기
-        var weights = mapOf(
-            0 to 23f,
-            1 to 20f,
-            2 to 30f,
-            3 to 21f,
-            4 to 16f,
-            5 to 26f,
-            6 to 18f
-        )
+//        var weights = mapOf(
+//            0 to 23f,
+//            1 to 20f,
+//            2 to 30f,
+//            3 to 21f,
+//            4 to 16f,
+//            5 to 26f,
+//            6 to 18f
+//        )
         //lineChart.setNoDataText(getString(R.string.graph_no_data))
 
         var entries = ArrayList<Entry>()
@@ -68,6 +79,11 @@ class WeightGraphFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = WeightGraphFragment()
+        lateinit var weights: Map<Int, Float>
+        fun newInstance(weights0: Map<Int, Float>): Fragment {
+            this.weights = weights0
+            Log.d("WeightGraphFrag-comp", "para weight: ${weights0}")
+            return WeightGraphFragment()
+        }
     }
 }

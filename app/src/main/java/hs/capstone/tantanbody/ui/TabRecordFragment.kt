@@ -2,6 +2,7 @@ package hs.capstone.tantanbody.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Application
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -17,7 +18,11 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.marginTop
+import androidx.fragment.app.viewModels
 import hs.capstone.tantanbody.R
+import hs.capstone.tantanbody.model.TTBApplication
+import hs.capstone.tantanbody.viewmodel.RecordedViewModel
+import hs.capstone.tantanbody.viewmodel.RecordedViewModelFactory
 
 class TabRecordFragment : Fragment() {
     val TAG = "TabRecordFragment"
@@ -25,8 +30,8 @@ class TabRecordFragment : Fragment() {
     lateinit var fitnessGraphTitle: TextView
     lateinit var weightGraphTitle: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val recordedViewModel by viewModels<RecordedViewModel> {
+        RecordedViewModelFactory((app as TTBApplication).userRepository)
     }
 
     override fun onCreateView(
@@ -66,7 +71,10 @@ class TabRecordFragment : Fragment() {
             Log.d(TAG, "R.id.recordFitnessGraph 클릭")
         }
         weightGraphTitle.setOnClickListener {
-            loadGraphFragment(WeightGraphFragment.newInstance())
+            var weights = recordedViewModel.getWeights()
+            Log.d(TAG, "weights: ${weights}")
+
+            loadGraphFragment(WeightGraphFragment.newInstance(weights))
             weightGraphTitle.setTextColor(getColorFrom(R.color.using_content))
             fitnessGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
             Log.d(TAG, "R.id.recordWeightGraph 클릭")
@@ -80,14 +88,18 @@ class TabRecordFragment : Fragment() {
         return Color.parseColor(getString(address))
     }
 
-    companion object {
-        fun newInstance() = TabRecordFragment()
-    }
-
     fun loadGraphFragment(fragment: Fragment) {
         var fragTranser = parentFragmentManager.beginTransaction()
         fragTranser.replace(R.id.recordGraphFragment, fragment)
         fragTranser.setReorderingAllowed(true)
         fragTranser.commit()
+    }
+
+    companion object {
+        lateinit var app: Application
+        fun newInstance(app: Application): Fragment {
+            this.app = app
+            return TabRecordFragment()
+        }
     }
 }

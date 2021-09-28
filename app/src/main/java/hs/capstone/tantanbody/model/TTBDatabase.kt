@@ -2,9 +2,8 @@ package hs.capstone.tantanbody.model
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import org.apache.ibatis.session.SqlSessionFactory
 
-class TantanBodyDatabase {
+class TTBDatabase {
 
     private class TantanBodyDatabaseCallback(
         private val scope: CoroutineScope) {
@@ -12,11 +11,11 @@ class TantanBodyDatabase {
     }
 
     companion object {
-        private var INSTANCE: SqlSessionFactory? = null
+        private var INSTANCE: Any? = null
         fun getDatabase(
             context: Context,
             scope: CoroutineScope
-        ): SqlSessionFactory? {
+        ): Any? {
             // DB와 연결할 때 필요한 것들 설정
             return INSTANCE
 //                ?: synchronized(this) {

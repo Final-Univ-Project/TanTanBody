@@ -17,13 +17,13 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // 메인 Fragment 로드하기
-        loadMainFragment(TabRecordFragment.newInstance())
+        loadMainFragment(TabRecordFragment.newInstance(application))
 
         // 하단 네비게이션 선택하면
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.tab_record -> {
-                    loadMainFragment(TabRecordFragment.newInstance())
+                    loadMainFragment(TabRecordFragment.newInstance(application))
                     Log.d(TAG, "R.id.tab_record 클릭")
                     true
                 }
