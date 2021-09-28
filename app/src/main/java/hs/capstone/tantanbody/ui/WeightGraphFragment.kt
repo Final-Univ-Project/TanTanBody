@@ -39,18 +39,6 @@ class WeightGraphFragment : Fragment() {
         lineChart = layout.findViewById(R.id.lineChart)
 
 
-        // LineChart 데이터 가져오기
-//        var weights = mapOf(
-//            0 to 23f,
-//            1 to 20f,
-//            2 to 30f,
-//            3 to 21f,
-//            4 to 16f,
-//            5 to 26f,
-//            6 to 18f
-//        )
-        //lineChart.setNoDataText(getString(R.string.graph_no_data))
-
         var entries = ArrayList<Entry>()
         weights.forEach {
             entries.add(Entry(it.key.toFloat(), it.value))
@@ -82,7 +70,6 @@ class WeightGraphFragment : Fragment() {
         lateinit var weights: Map<Int, Float>
         fun newInstance(weights0: Map<Int, Float>): Fragment {
             this.weights = weights0
-            Log.d("WeightGraphFrag-comp", "para weight: ${weights0}")
             return WeightGraphFragment()
         }
     }

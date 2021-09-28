@@ -19,9 +19,6 @@ import hs.capstone.tantanbody.model.GoogleLoginRepository
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
-//    lateinit var emailEt: EditText
-//    lateinit var pwEt: EditText
-//    lateinit var signInBtn: Button
     lateinit var signInGoogle: SignInButton
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -58,7 +55,13 @@ class LogInActivity: Activity() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+            if (task.isSuccessful) {
+                handleSignInResult(task)
+            } else {
+                // 앱 종료 방지
+                Log.e(TAG, "Google 로그인 중단")
+                Toast.makeText(this, getString(R.string.fail_google_login), Toast.LENGTH_LONG)
+            }
         }
     }
 

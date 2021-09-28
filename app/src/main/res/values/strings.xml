@@ -4,10 +4,7 @@
     <string name="youtube_api_key">AIzaSyDzqeDLbC3VPBtwxjm71xd-FuFzcdIh2gs</string>
 
     <!-- LogInActivity -->
-    <string name="login_hint_id">Email</string>
-    <string name="login_hint_pw">Password</string>
-    <string name="sign_in_button">회원가입</string>
-    <string name="fail_email_form">email 형식을 맞추어주세요.</string>
+    <string name="fail_google_login">Google 로그인을 완료해주세요</string>
     <!-- RecordActivity -->
     <string name="goal_title">운동 목표</string>
     <string name="goal_dialog_title">운동 목표 설정</string>
