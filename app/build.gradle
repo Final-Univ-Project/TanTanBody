@@ -3,6 +3,11 @@ plugins {
     id 'kotlin-android'
 }
 
+task wrapper(type: Wrapper){ //Task 'wrapper' not found in project ':app'. 해결 위함
+    gradleVersion = '7.0.2'
+}
+tasks.register("prepareKotlinBuildScriptModel") //Task 'prepareKotlinBuildScriptModel' not found in project ':app'. 해결 위함
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -50,7 +55,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Youtube
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
-    implementation 'com.squareup.retrofit2:retrofit:2.8.0'
+    //network - retrofit version upgrade
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
 
     // Google Sign-In for Android
