@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TantanBody">
+        android:theme="@style/Theme.TantanBody"
+        android:usesCleartextTraffic="true"> <!--http 접근을 허용하게 함-->
 
         <activity android:name=".ui.LogInActivity">
             <intent-filter>
