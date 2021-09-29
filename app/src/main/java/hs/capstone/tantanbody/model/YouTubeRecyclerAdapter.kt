@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.data.YouTubeVideo
 
-class YouTubeRecyclerAdapter(val searchResultList: List<SearchResult>?)
+class YouTubeRecyclerAdapter(private val searchResultList: List<SearchResult>?)
     : RecyclerView.Adapter<YouTubeRecyclerAdapter.YouTubeHolder>() {
 
     inner class YouTubeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,7 +37,8 @@ class YouTubeRecyclerAdapter(val searchResultList: List<SearchResult>?)
 
     override fun onBindViewHolder(holder: YouTubeHolder, position: Int) {
         searchResultList?.also {
-            val YTvideo = it.get(position).run {
+
+            holder.bind(it.get(position).run {
                 val thumbnail = this.snippet.thumbnails["default"] as Thumbnail
                 YouTubeVideo(
                     videoId = "${this.id}",
@@ -48,8 +49,7 @@ class YouTubeRecyclerAdapter(val searchResultList: List<SearchResult>?)
                     thumbnail = thumbnail.url,
                     channelTitle = this.snippet.channelTitle
                 )
-            }
-            holder.bind(YTvideo)
+            })
         }
     }
 

@@ -1,6 +1,7 @@
 package hs.capstone.tantanbody.model
 
 import android.app.Application
+import hs.capstone.tantanbody.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
@@ -12,6 +13,6 @@ class TTBApplication : Application() {
 
     // Repository 인스턴스 생성
     val userRepository by lazy { UserRepository() }
-    val youtubeRepository by lazy {}
+    val youtubeRepository by lazy { YouTubeRepository() }
     val mealRepository by lazy {}
 }
