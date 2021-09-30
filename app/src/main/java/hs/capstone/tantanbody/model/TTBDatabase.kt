@@ -1,10 +1,10 @@
 package hs.capstone.tantanbody.model
 
 import android.content.Context
+import hs.capstone.tantanbody.R
 import kotlinx.coroutines.CoroutineScope
 
 class TTBDatabase {
-
     private class TantanBodyDatabaseCallback(
         private val scope: CoroutineScope) {
         // table data 가져오기

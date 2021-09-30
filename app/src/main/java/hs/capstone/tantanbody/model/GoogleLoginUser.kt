@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import hs.capstone.tantanbody.model.data.GoogleAccount
 
-class GoogleLoginRepository(signIn: GoogleSignInAccount?) {
+class GoogleLoginUser(signIn: GoogleSignInAccount?) {
     val TAG = "GoogleLoginRepository"
     var user: GoogleAccount? = null
     val isLoggedIn: Boolean

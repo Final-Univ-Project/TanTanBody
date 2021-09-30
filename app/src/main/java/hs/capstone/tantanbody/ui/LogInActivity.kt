@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -15,7 +13,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.model.GoogleLoginRepository
+import hs.capstone.tantanbody.model.GoogleLoginUser
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
@@ -60,7 +58,7 @@ class LogInActivity: Activity() {
             } else {
                 // 앱 종료 방지
                 Log.e(TAG, "Google 로그인 중단")
-                Toast.makeText(this, getString(R.string.fail_google_login), Toast.LENGTH_LONG)
+                Toast.makeText(applicationContext, getString(R.string.fail_google_login), Toast.LENGTH_LONG)
             }
         }
     }
@@ -76,7 +74,7 @@ class LogInActivity: Activity() {
     }
     fun loginFromGoogleAccount(account: GoogleSignInAccount?) {
         account?.run {
-            GoogleLoginRepository(this)
+            GoogleLoginUser(this)
 
             val intent = Intent(this@LogInActivity, MainActivity::class.java)
             startActivity(intent)
