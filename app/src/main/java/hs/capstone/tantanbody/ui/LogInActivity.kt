@@ -64,10 +64,13 @@ class LogInActivity: Activity() {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            val account = completedTask.getResult(ApiException::class.java)
-            loginFromGoogleAccount(account)
+            loginFromGoogleAccount2()
+//            TODO 구글로 로그인 error 때문에 임시로 막음 - 이거 빼면 구글로 로그인 상관 없이 일단 메인 페이지로 넘어감
+//            val account = completedTask.getResult(ApiException::class.java)
+//            loginFromGoogleAccount(account)
         } catch (e: ApiException) {
-            Toast.makeText(this, e.statusCode, Toast.LENGTH_LONG).show()
+//            TODO 여기서 추가 오류 발생해서 일단 막음
+//            Toast.makeText(this, e.statusCode, Toast.LENGTH_LONG).show()
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
         }
     }
@@ -81,4 +84,16 @@ class LogInActivity: Activity() {
 
     }
 
+    /**
+     * 구글로 로그인 패스 후
+     * 메인 화면으로 넘어갈 수 있도록 만든 function
+     */
+    fun loginFromGoogleAccount2() {
+        run {
+            //myAppId = "pigismile@gmail.com"
+            val intent = Intent(this@LogInActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
 }
