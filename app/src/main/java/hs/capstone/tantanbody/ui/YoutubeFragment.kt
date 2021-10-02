@@ -1,6 +1,8 @@
 package hs.capstone.tantanbody.ui
 
 import android.app.Application
+import android.content.Context
+import android.media.AsyncPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +18,12 @@ import hs.capstone.tantanbody.model.TTBApplication
 import hs.capstone.tantanbody.model.YouTubeRecyclerAdapter
 import hs.capstone.tantanbody.viewmodel.YouTubeViewModel
 import hs.capstone.tantanbody.viewmodel.YouTubeViewModelFactory
+import kotlinx.coroutines.withTimeout
+import java.security.AllPermission
 
 class YoutubeFragment : Fragment() {
     val TAG = "YoutubeFragment"
+    lateinit var app: Application
     lateinit var YTListRecyclerView: RecyclerView
     var YTList: List<SearchResult> ?= null
 
@@ -33,7 +38,7 @@ class YoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
-        YTList = youtubeVM.getYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key))
+        YTList = youtubeVM.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key))
         if (YTList == null) {
             Toast.makeText(context, getString(R.string.fail_loading_youtube), Toast.LENGTH_LONG)
         }
@@ -43,10 +48,14 @@ class YoutubeFragment : Fragment() {
         return layout
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        this.app = context.applicationContext as Application
+    }
+
     companion object {
-        lateinit var app: Application
-        fun newInstance(app: Application): Fragment {
-            this.app = app
+        fun newInstance(): Fragment {
             return YoutubeFragment()
         }
     }

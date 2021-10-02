@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import hs.capstone.tantanbody.R
+import hs.capstone.tantanbody.user.TabRecordFragment
 
 class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"
@@ -17,18 +18,18 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // 메인 Fragment 로드하기
-        loadMainFragment(TabRecordFragment.newInstance(application))
+        loadMainFragment(TabRecordFragment.newInstance())
 
         // 하단 네비게이션 선택하면
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.tab_record -> {
-                    loadMainFragment(TabRecordFragment.newInstance(application))
+                    loadMainFragment(TabRecordFragment.newInstance())
                     Log.d(TAG, "R.id.tab_record 클릭")
                     true
                 }
                 R.id.tab_workout -> {
-                    loadMainFragment(YoutubeFragment.newInstance(application))
+                    loadMainFragment(YoutubeFragment.newInstance())
                     Log.d(TAG, "R.id.tab_workout 클릭")
                     true
                 }

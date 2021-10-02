@@ -1,6 +1,7 @@
 package hs.capstone.tantanbody.model
 
 import android.util.Log
+import hs.capstone.tantanbody.model.data.GoogleAccount
 import java.time.LocalDateTime
 
 class UserRepository {
@@ -8,6 +9,8 @@ class UserRepository {
     // DB에 변화를 알리는 자료형으로 감싸기
     var workoutTimes: List<Int> = initT() // userTable.getWorkoutTimes()
     var userWeights: List<Int> = initW() // userTable.getWeights()
+
+    var googleLoginUser: GoogleAccount ?= null
 
     fun initT() : List<Int> {
         return listOf(23, 20, 30, 21, 16, 26, 18)

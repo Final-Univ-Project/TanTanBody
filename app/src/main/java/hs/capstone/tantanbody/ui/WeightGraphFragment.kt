@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.ui
+package hs.capstone.tantanbody.user
 
 import android.annotation.SuppressLint
 import android.graphics.Color

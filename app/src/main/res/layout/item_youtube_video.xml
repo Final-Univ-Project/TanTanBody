@@ -12,6 +12,11 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
+        <ImageView
+            android:src="@drawable/ic_fav_youtube_24"
+            android:layout_width="42dp"
+            android:layout_height="42dp"/>
+
         <TextView
             android:id="@+id/keywords"
             android:text="#20분"

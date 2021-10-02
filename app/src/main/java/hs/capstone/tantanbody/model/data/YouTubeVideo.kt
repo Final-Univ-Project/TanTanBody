@@ -10,7 +10,8 @@ data class YouTubeVideo(
     val title: String,
     val description: String?,
     val thumbnail: String,
-    val channelTitle: String?
+    val channelTitle: String?,
+    var isFaverite: Boolean? = false
 ) {
     override fun toString(): String {
         return "  videoId: ${videoId}\n" +

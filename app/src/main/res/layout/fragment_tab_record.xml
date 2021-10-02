@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.TabRecordFragment">
+    tools:context=".user.TabRecordFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,14 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="25dp"/>
             <View
                 android:background="@color/using_content"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_below="@id/goalTitleTv"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
 
         <androidx.fragment.app.FragmentContainerView
@@ -48,6 +48,7 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_below="@id/recordGraphFragment">
             <TextView
                 android:id="@+id/fitnessGraphTitle"
@@ -68,6 +69,31 @@
                 android:layout_weight="1"
                 android:textAlignment="center"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/goalBrief"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/using_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/graphTitle"
+            android:layout_above="@id/addWeightBtn"
+            android:gravity="center_vertical"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/addWeightBtn"
+            android:text="몸무게 등록"
+            android:textSize="17dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"/>
 
     </RelativeLayout>
 

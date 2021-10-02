@@ -40,6 +40,7 @@ class YouTubeRecyclerAdapter(private val searchResultList: List<SearchResult>?)
 
             holder.bind(it.get(position).run {
                 val thumbnail = this.snippet.thumbnails["default"] as Thumbnail
+                // YouTubeVideo() 바인딩
                 YouTubeVideo(
                     videoId = "${this.id}",
                     publishedAt = this.snippet.publishedAt,
