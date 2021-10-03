@@ -1,7 +1,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">TantanBody</string>
-    <string name="youtube_api_key">AIzaSyC2VEzCvqLanGiHj_kiQID7_EhuMCGH1zI</string>
+    <string name="youtube_api_key"></string>
 
     <!-- LogInActivity -->
     <string name="fail_google_login">Google 로그인을 완료해주세요</string>

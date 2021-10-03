@@ -12,11 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
-        <ImageView
-            android:src="@drawable/ic_fav_youtube_24"
-            android:layout_width="42dp"
-            android:layout_height="42dp"/>
-
         <TextView
             android:id="@+id/keywords"
             android:text="#20분"
@@ -26,9 +21,17 @@
             android:layout_alignRight="@id/thumbnailView"/>
 
         <ImageView
+            android:id="@+id/isFavView"
+            android:src="@drawable/ic_fav_youtube_24"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:visibility="gone"/>
+
+        <ImageView
             android:id="@+id/thumbnailView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_width="377dp"
+            android:layout_height="283dp"/>
+
     </RelativeLayout>
 
 

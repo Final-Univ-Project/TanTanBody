@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.tab_workout -> {
-                    loadMainFragment(YoutubeFragment.newInstance())
+                    loadMainFragment(TabYoutubeFragment.newInstance())
                     Log.d(TAG, "R.id.tab_workout 클릭")
                     true
                 }
