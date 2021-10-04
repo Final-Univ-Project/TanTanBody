@@ -14,7 +14,6 @@
 
         <TextView
             android:id="@+id/keywords"
-            android:text="#20분"
             android:textSize="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +57,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-
 
 </RelativeLayout>

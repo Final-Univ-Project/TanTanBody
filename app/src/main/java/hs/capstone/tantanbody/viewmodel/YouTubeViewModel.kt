@@ -35,10 +35,6 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
         Log.d(TAG, "videoId: ${videoId} isFaverite: ${youtubeVideoMap[videoId]?.isFaverite}")
     }
 
-    fun getYoutubeVideo(videoId: String): YouTubeVideo? {
-        return youtubeVideoMap[videoId]
-    }
-
     fun convert2YouTubeVideo(results: List<SearchResult>?): List<YouTubeVideo>? {
         results?.forEach {
             val thumbnail = it.snippet.thumbnails["high"] as Thumbnail

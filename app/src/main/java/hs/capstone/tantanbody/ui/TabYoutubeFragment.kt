@@ -27,7 +27,7 @@ class TabYoutubeFragment : Fragment() {
     val TAG = "YoutubeFragment"
     lateinit var app: Application
     lateinit var YTListRecyclerView: RecyclerView
-    var YTList: List<YouTubeVideo> ?= null
+    var YTList = mutableListOf<YouTubeVideo>()
 
     private val youtubeViewModel by viewModels<YouTubeViewModel> {
         YouTubeViewModelFactory((app as TTBApplication).youtubeRepository)
@@ -40,16 +40,21 @@ class TabYoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
-        YTList = youtubeViewModel.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key))
-        if (YTList == null) {
-            Toast.makeText(context, getString(R.string.fail_loading_youtube), Toast.LENGTH_LONG)
+        youtubeViewModel.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).let {
+            if (it == null) {
+                Toast.makeText(this.context, getString(R.string.fail_loading_youtube), Toast.LENGTH_LONG)
+            } else {
+                YTList.addAll(it)
+            }
         }
-        val videoAdapter = YouTubeRecyclerAdapter(YTList)
 
-        YTListRecyclerView.layoutManager = LinearLayoutManager(context)
-        YTListRecyclerView.adapter = videoAdapter
-
-//        buildSettingFavDialog("jkn").show()
+        YTListRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@TabYoutubeFragment.context)
+            adapter = YouTubeRecyclerAdapter(YTList) { video ->
+                Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
+                buildSettingFavDialog(video.videoId, video.isFaverite).show()
+            }
+        }
 
         return layout
     }
@@ -60,13 +65,10 @@ class TabYoutubeFragment : Fragment() {
         this.app = context.applicationContext as Application
     }
 
-    fun buildSettingFavDialog(videoId: String): AlertDialog.Builder {
-        var message = "".apply {
-            val tmp = youtubeViewModel.youtubeVideoMap[videoId]!!.isFaverite
-            if (true)
-                "즐겨찾기에 추가할까요?"
-            else
-                "즐겨찾기에서 삭제할까요?"
+    fun buildSettingFavDialog(videoId: String, isFav: Boolean): AlertDialog.Builder {
+        val message = run {
+            if (isFav) "즐겨찾기에서 삭제할까요?"
+            else "즐겨찾기에 추가할까요?"
         }
 
         val favDlg: AlertDialog.Builder = AlertDialog.Builder(
