@@ -1,5 +1,8 @@
 package hs.capstone.tantanbody.network
 
+import hs.capstone.tantanbody.model.data.DietDto
+import hs.capstone.tantanbody.model.data.FoodDto
+import hs.capstone.tantanbody.model.data.RecentFoodDto
 import hs.capstone.tantanbody.model.data.UserDto
 import retrofit2.Call
 import retrofit2.http.*
@@ -9,10 +12,26 @@ import retrofit2.http.*
  *
  */
 interface RetrofitService {
-    //@FormUrlEncoded
-    //@GET("http://192.168.10.27:8080/users")
-    @GET
-    fun getUsers(@Url url: String): Call<UserDto>
+
+    //== 로그인 화면 ==//
+    @GET("users")
+    fun getUsers(): Call<ArrayList<UserDto>>
+
+    @POST
+    fun saveUser()
+
+    //== 식단 화면 ==//
+    @GET("diet") //사실상 post로 바꿔야함 ... back도 마찬가지
+    fun getFoods(
+        @Query("userEmail") userEmail : String): Call<ArrayList<DietDto>>
+
+    @GET("diet/w/search")
+    fun getRecentFoods(
+        @Query("userEmail") userEmail: String) : Call<RecentFoodDto>
+
+    @GET("diet/w/search/foodList")
+    fun getFoodList(
+        @Query("sFoodName") searchFood : String) : Call<ArrayList<FoodDto>>
 
     @FormUrlEncoded
     @POST("diet/save")
@@ -23,4 +42,7 @@ interface RetrofitService {
         @Field("eatCount") eatCount: Int,
         @Field("totalKcal") totalKcal: Int
     ): Call<String>
+
+    //== 운동 화면 ==//
+
 }
