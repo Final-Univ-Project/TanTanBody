@@ -5,13 +5,13 @@
 
     <!-- LogInActivity -->
     <string name="fail_google_login">Google 로그인을 완료해주세요</string>
-    <!-- RecordActivity -->
+    <!-- UserActivity -->
     <string name="goal_title">운동 목표</string>
     <string name="goal_dialog_title">운동 목표 설정</string>
-    <string name="graph_title_fitness">운동 시간 변화</string>
+    <string name="graph_title_exercise">운동 시간 변화</string>
     <string name="graph_title_weight">몸무게 감량 변화</string>
     <string name="graph_label_weight">몸무게 변화량</string>
-    <string name="graph_label_fitness">운동시간</string>
+    <string name="graph_label_exercise">운동시간</string>
     <string name="graph_no_data">데이터가 존재하지 않습니다</string>
     <!-- YoutubeVideoActivity -->
     <string name="fail_loading_youtube">유튜브 영상 로드를 실패했습니다</string>

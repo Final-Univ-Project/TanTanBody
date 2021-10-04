@@ -8,6 +8,8 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
 import java.time.LocalDateTime
@@ -29,8 +31,11 @@ class WeightAddActivity : AppCompatActivity() {
         weightAddPicker = findViewById(R.id.weightAddPicker)
         setWeightBtn = findViewById(R.id.setWeightBtn)
 
+        loadWeightGraphFragment(
+            WeightGraphFragment.newInstance(recordedViewModel.userWeights.value ?: mapOf()))
+
         weightAddDay.text = recordedViewModel.today //오늘날짜
-        weightAddPicker.maxValue = 10000 //kg
+        weightAddPicker.minValue = 10000 //kg
         weightAddPicker.minValue = 1
         weightAddPicker.value = 50
         weightAddPicker.wrapSelectorWheel = false
@@ -43,10 +48,16 @@ class WeightAddActivity : AppCompatActivity() {
             Log.d(TAG, "weightPicker.value: ${weightAddPicker.value}")
             Log.d(TAG, "weightPicker.display: ${weightAddPicker.display}")
 
-            //
+            recordedViewModel.userWeights.switchMap { items ->
+                liveData {
+                    var oldMap = items.toMutableMap()
+                    oldMap.put(recordedViewModel.today, weightAddPicker.value.toFloat())
+                    emit(oldMap)
+                }
+            }
         }
 
-        loadWeightGraphFragment(WeightGraphFragment.newInstance(recordedViewModel.getWeights()))
+
     }
 
     fun loadWeightGraphFragment(fragment: Fragment) {

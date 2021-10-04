@@ -19,6 +19,7 @@
         <entry key="app/src/main/res/layout/fragment_fitness_graph.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.24270833333333333" />
         <entry key="app/src/main/res/layout/fragment_tab_record.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_tab_user.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_weight_graph.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_youtube.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_youtube_video.xml" value="0.1" />

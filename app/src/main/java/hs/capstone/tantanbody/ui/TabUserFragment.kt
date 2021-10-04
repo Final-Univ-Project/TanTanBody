@@ -15,17 +15,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
-import hs.capstone.tantanbody.user.WeightAddActivity
 
-class TabRecordFragment : Fragment() {
+class TabUserFragment : Fragment() {
     val TAG = "TabRecordFragment"
     lateinit var app: Application
     lateinit var goalTitleTv: TextView
-    lateinit var fitnessGraphTitle: TextView
+    lateinit var exerciseGraphTitle: TextView
     lateinit var weightGraphTitle: TextView
     lateinit var goalBrief: TextView
     lateinit var addWeightBtn: Button
@@ -33,14 +36,21 @@ class TabRecordFragment : Fragment() {
     private val recordedViewModel by viewModels<UserViewModel> {
         UserViewModelFactory((app as TTBApplication).userRepository)
     }
+    private lateinit var userWeights: Map<String, Float>
+    private lateinit var userExercises: Map<String, Int>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.app = context.applicationContext as Application
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_tab_record, container, false)
+        val layout = inflater.inflate(R.layout.fragment_tab_user, container, false)
         goalTitleTv = layout.findViewById(R.id.goalTitleTv)
-        fitnessGraphTitle = layout.findViewById(R.id.fitnessGraphTitle)
+        exerciseGraphTitle = layout.findViewById(R.id.exerciseGraphTitle)
         weightGraphTitle = layout.findViewById(R.id.weightGraphTitle)
         goalBrief = layout.findViewById(R.id.goalBrief)
         addWeightBtn = layout.findViewById(R.id.addWeightBtn)
@@ -49,33 +59,37 @@ class TabRecordFragment : Fragment() {
             buildEditingGoalDialog().show()
             Log.d(TAG, "R.id.goalTitle 클릭")
         }
-        fitnessGraphTitle.setOnClickListener {
-            loadGraphFragment(FitnessGraphFragment.newInstance())
-            fitnessGraphTitle.setTextColor(getColorFrom(R.color.using_content))
+        exerciseGraphTitle.setOnClickListener {
+            loadGraphFragment(ExerciseGraphFragment.newInstance(userExercises))
+            exerciseGraphTitle.setTextColor(getColorFrom(R.color.using_content))
             weightGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
             Log.d(TAG, "R.id.recordFitnessGraph 클릭")
         }
         weightGraphTitle.setOnClickListener {
-            var weights = recordedViewModel.getWeights()
-            Log.d(TAG, "weights: ${weights}")
-
-            loadGraphFragment(WeightGraphFragment.newInstance(weights))
+            loadGraphFragment(WeightGraphFragment.newInstance(userWeights))
             weightGraphTitle.setTextColor(getColorFrom(R.color.using_content))
-            fitnessGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
+            exerciseGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
             Log.d(TAG, "R.id.recordWeightGraph 클릭")
         }
         addWeightBtn.setOnClickListener {
             val intent = Intent(context, WeightAddActivity::class.java)
             startActivity(intent)
         }
-        fitnessGraphTitle.performClick()
+
+        userWeights = recordedViewModel.userWeights.value ?: mapOf()
+        userExercises = recordedViewModel.exerciseTimes.value ?: mapOf()
+        recordedViewModel.goal.observe(viewLifecycleOwner, Observer { goal ->
+            setGoalBriefUI(goal)
+        })
+        recordedViewModel.userWeights.observe(viewLifecycleOwner, Observer { items ->
+            userWeights = items
+        })
+        recordedViewModel.exerciseTimes.observe(viewLifecycleOwner, Observer { items ->
+            userExercises = items
+        })
+
+        exerciseGraphTitle.performClick()
         return layout
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        this.app = context.applicationContext as Application
     }
 
     @SuppressLint("ResourceType")
@@ -85,7 +99,7 @@ class TabRecordFragment : Fragment() {
 
     fun loadGraphFragment(fragment: Fragment) {
         var fragTranser = parentFragmentManager.beginTransaction()
-        fragTranser.replace(R.id.recordGraphFragment, fragment)
+        fragTranser.replace(R.id.userGraphFragment, fragment)
         fragTranser.setReorderingAllowed(true)
         fragTranser.commit()
     }
@@ -104,10 +118,11 @@ class TabRecordFragment : Fragment() {
             "확인",
             DialogInterface.OnClickListener { dialog, which ->
                 // ViewModel에 운동 목표 저장
-                Log.d(TAG, "goalEt.text: ${goalEt.text}")
-
-                recordedViewModel.goal = goalEt.text.toString()
-                setGoalBriefUI(recordedViewModel.goal)
+                recordedViewModel.goal.switchMap { goal ->
+                    liveData { emit(goalEt.text.toString()) }
+                }
+                setGoalBriefUI(recordedViewModel.goal.value)
+                Log.e(TAG, "model.goal: ${recordedViewModel.goal.value}")
             }
         )
         return goalDlg
@@ -116,16 +131,15 @@ class TabRecordFragment : Fragment() {
     fun setGoalBriefUI(goal: String?) {
         val form = " %s 님의 운동목표는\n \"%s\" 입니다."
         if (goal.isNullOrEmpty()) {
-            goalBrief.visibility = View.INVISIBLE
+            goalBrief.visibility = View.GONE
         } else {
             goalBrief.text = form.format(recordedViewModel.LoginUser?.displayName, goal)
-
         }
     }
 
     companion object {
         fun newInstance(): Fragment {
-            return TabRecordFragment()
+            return TabUserFragment()
         }
     }
 }

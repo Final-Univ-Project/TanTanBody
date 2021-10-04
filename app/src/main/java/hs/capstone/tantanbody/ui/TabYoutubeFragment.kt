@@ -9,13 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.api.services.youtube.model.SearchResult
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
 import hs.capstone.tantanbody.model.YouTubeRecyclerAdapter
@@ -37,7 +35,7 @@ class TabYoutubeFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        var layout = inflater.inflate(R.layout.fragment_youtube, container, false)
+        var layout = inflater.inflate(R.layout.fragment_tab_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
         youtubeViewModel.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).let {

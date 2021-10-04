@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.TabRecordFragment">
+    tools:context=".user.TabUserFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         </LinearLayout>
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/recordGraphFragment"
+            android:id="@+id/userGraphFragment"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="15dp"
@@ -49,10 +49,10 @@
             android:weightSum="2"
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="5dp"
-            android:layout_below="@id/recordGraphFragment">
+            android:layout_below="@id/userGraphFragment">
             <TextView
-                android:id="@+id/fitnessGraphTitle"
-                android:text="@string/graph_title_fitness"
+                android:id="@+id/exerciseGraphTitle"
+                android:text="@string/graph_title_exercise"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
