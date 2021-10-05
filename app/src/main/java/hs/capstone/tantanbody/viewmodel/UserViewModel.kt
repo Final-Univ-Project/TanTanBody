@@ -1,24 +1,36 @@
 package hs.capstone.tantanbody.user
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import hs.capstone.tantanbody.model.UserRepository
 import hs.capstone.tantanbody.model.data.GoogleAccount
-import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.coroutines.coroutineContext
 
-class UserViewModel(private val repo: UserRepository) : ViewModel() {
+class UserViewModel(val repo: UserRepository) : ViewModel() {
     val TAG = "RecordedViewModel"
     val LoginUser: GoogleAccount? = repo.googleLoginUser
     var goal: LiveData<String> = repo.goal
     var exerciseTimes: LiveData<Map<String, Int>> = repo.exerciseTimes
     var userWeights: LiveData<Map<String, Float>> = repo.userWeights
 
-    val today: String = "2021년 10월 3일"
+    val today: String by lazy {
+        val todayFormat = SimpleDateFormat("yyyy/MM/dd") // 요일 추가하기
+        todayFormat.format(Date()) //"2021년 10월 3일"
+    }
+    init {
+
+        Log.e(TAG, "userWeights: ${userWeights.value}")
+//        repo.exerciseTimes.observeForever(Observer {
+//            this.exerciseTimes = liveData { emit(it) }
+//        })
+//        repo.userWeights.observeForever(Observer {
+//            this.userWeights = liveData { emit(it) }
+//        })
+    }
 
 
 //    @RequiresApi(Build.VERSION_CODES.O)
@@ -29,11 +41,14 @@ class UserViewModel(private val repo: UserRepository) : ViewModel() {
 //        return enterTime.toString()
 //    }
 
-    fun insertExerciseTime(minute: Int) = viewModelScope.launch {
+    fun setGoal(goal: String) {
+        repo.setGoal(goal)
+    }
+    fun insertExerciseTime(minute: Int) {
         // 오늘날짜(application에 있음) 랑 같이 전달
         repo.insertExerciseTime(today, minute) // 분(minute)으로 변환
     }
-    fun insertWeight(kg: Float) = viewModelScope.launch {
+    fun insertWeight(kg: Float) {
         repo.insertWeight(today, kg)
     }
 }

@@ -15,17 +15,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.map
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
+import kotlinx.coroutines.flow.flowOf
 
 class TabUserFragment : Fragment() {
-    val TAG = "TabRecordFragment"
+    val TAG = "TabUserFragment"
     lateinit var app: Application
     lateinit var goalTitleTv: TextView
     lateinit var exerciseGraphTitle: TextView
@@ -33,7 +33,7 @@ class TabUserFragment : Fragment() {
     lateinit var goalBrief: TextView
     lateinit var addWeightBtn: Button
 
-    private val recordedViewModel by viewModels<UserViewModel> {
+    private val model by viewModels<UserViewModel> {
         UserViewModelFactory((app as TTBApplication).userRepository)
     }
     private lateinit var userWeights: Map<String, Float>
@@ -42,6 +42,8 @@ class TabUserFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.app = context.applicationContext as Application
+        userWeights = model.userWeights.value ?: mapOf()
+        userExercises = model.exerciseTimes.value ?: mapOf()
     }
 
     override fun onCreateView(
@@ -54,6 +56,16 @@ class TabUserFragment : Fragment() {
         weightGraphTitle = layout.findViewById(R.id.weightGraphTitle)
         goalBrief = layout.findViewById(R.id.goalBrief)
         addWeightBtn = layout.findViewById(R.id.addWeightBtn)
+
+        model.goal.observe(viewLifecycleOwner, Observer { goal ->
+            setGoalBriefUI(goal)
+        })
+        model.userWeights.observe(viewLifecycleOwner, Observer { kgs ->
+            userWeights = kgs
+        })
+        model.exerciseTimes.observe(viewLifecycleOwner, Observer { mins ->
+            userExercises = mins
+        })
 
         goalTitleTv.setOnClickListener {
             buildEditingGoalDialog().show()
@@ -76,19 +88,8 @@ class TabUserFragment : Fragment() {
             startActivity(intent)
         }
 
-        userWeights = recordedViewModel.userWeights.value ?: mapOf()
-        userExercises = recordedViewModel.exerciseTimes.value ?: mapOf()
-        recordedViewModel.goal.observe(viewLifecycleOwner, Observer { goal ->
-            setGoalBriefUI(goal)
-        })
-        recordedViewModel.userWeights.observe(viewLifecycleOwner, Observer { items ->
-            userWeights = items
-        })
-        recordedViewModel.exerciseTimes.observe(viewLifecycleOwner, Observer { items ->
-            userExercises = items
-        })
-
         exerciseGraphTitle.performClick()
+        setGoalBriefUI(model.goal.value ?: "")
         return layout
     }
 
@@ -118,11 +119,8 @@ class TabUserFragment : Fragment() {
             "확인",
             DialogInterface.OnClickListener { dialog, which ->
                 // ViewModel에 운동 목표 저장
-                recordedViewModel.goal.switchMap { goal ->
-                    liveData { emit(goalEt.text.toString()) }
-                }
-                setGoalBriefUI(recordedViewModel.goal.value)
-                Log.e(TAG, "model.goal: ${recordedViewModel.goal.value}")
+                model.setGoal(goalEt.text.toString())
+                setGoalBriefUI(model.goal.value ?: "well..")
             }
         )
         return goalDlg
@@ -133,7 +131,8 @@ class TabUserFragment : Fragment() {
         if (goal.isNullOrEmpty()) {
             goalBrief.visibility = View.GONE
         } else {
-            goalBrief.text = form.format(recordedViewModel.LoginUser?.displayName, goal)
+            goalBrief.text = form.format(model.LoginUser?.displayName, goal)
+            goalBrief.visibility = View.VISIBLE
         }
     }
 

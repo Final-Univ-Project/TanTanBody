@@ -20,7 +20,7 @@ class WeightAddActivity : AppCompatActivity() {
     lateinit var weightAddPicker: NumberPicker
     lateinit var setWeightBtn: Button
 
-    private val recordedViewModel by viewModels<UserViewModel> {
+    private val model by viewModels<UserViewModel> {
         UserViewModelFactory((application as TTBApplication).userRepository)
     }
 
@@ -32,9 +32,9 @@ class WeightAddActivity : AppCompatActivity() {
         setWeightBtn = findViewById(R.id.setWeightBtn)
 
         loadWeightGraphFragment(
-            WeightGraphFragment.newInstance(recordedViewModel.userWeights.value ?: mapOf()))
+            WeightGraphFragment.newInstance(model.userWeights.value ?: mapOf()))
 
-        weightAddDay.text = recordedViewModel.today //오늘날짜
+        weightAddDay.text = model.today //오늘날짜
         weightAddPicker.minValue = 10000 //kg
         weightAddPicker.minValue = 1
         weightAddPicker.value = 50
@@ -48,16 +48,8 @@ class WeightAddActivity : AppCompatActivity() {
             Log.d(TAG, "weightPicker.value: ${weightAddPicker.value}")
             Log.d(TAG, "weightPicker.display: ${weightAddPicker.display}")
 
-            recordedViewModel.userWeights.switchMap { items ->
-                liveData {
-                    var oldMap = items.toMutableMap()
-                    oldMap.put(recordedViewModel.today, weightAddPicker.value.toFloat())
-                    emit(oldMap)
-                }
-            }
+            model.insertWeight(weightAddPicker.value.toFloat())
         }
-
-
     }
 
     fun loadWeightGraphFragment(fragment: Fragment) {
