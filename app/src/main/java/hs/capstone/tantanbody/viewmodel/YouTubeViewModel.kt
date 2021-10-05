@@ -17,6 +17,8 @@ import com.google.api.services.youtube.model.Thumbnail
 import hs.capstone.tantanbody.model.YouTubeRepository
 import hs.capstone.tantanbody.model.data.YouTubeVideo
 import kotlinx.coroutines.*
+import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
+import kr.co.shineware.nlp.komoran.core.Komoran
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
@@ -63,8 +65,19 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
         repo.insertClickedYouTube(now, video)
     }
 
-    fun convert2YouTubeVideo(results: List<SearchResult>?): List<YouTubeVideo>? {
-        results?.forEach {
+    fun getYouTubeVideoKeywords(sentence: String): List<String> {
+        var komoran = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence)
+        Log.e(TAG, "** sentence: ${sentence}")
+        Log.e(TAG, "** nouns: ${komoran.nouns}")
+
+//        komoran.tokenList.forEach { token ->
+//            Log.e(TAG, "morph: ${token.morph} pos: ${token.pos}")
+//        }
+        return komoran.nouns
+    }
+    fun convert2YouTubeVideo(results: List<SearchResult>): List<YouTubeVideo> {
+        results.forEach {
+            val keywords = getYouTubeVideoKeywords(it.snippet.title)
             val thumbnail = it.snippet.thumbnails["high"] as Thumbnail
             // YouTubeVideo() 바인딩
             youtubeVideoMap[it.id.videoId] = YouTubeVideo(
@@ -74,7 +87,8 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
                 title = it.snippet.title,
                 description = it.snippet.description,
                 thumbnail = thumbnail.url,
-                channelTitle = it.snippet.channelTitle
+                channelTitle = it.snippet.channelTitle,
+                keywords = keywords
             )
         }
         return youtubeVideoMap.values.toList()

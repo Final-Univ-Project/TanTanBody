@@ -52,6 +52,11 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation 'com.squareup.retrofit2:retrofit:2.8.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    // KOMORAN
+    implementation('com.github.shin285:KOMORAN:3.3.4') {
+        exclude group: 'com.github.shineware', module: 'commons'
+        exclude group: 'com.github.shineware', module: 'aho-corasick'
+    }
 
     // Google Sign-In for Android
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
