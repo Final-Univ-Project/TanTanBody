@@ -17,7 +17,7 @@ class UserViewModel(val repo: UserRepository) : ViewModel() {
 
     var today = run<String> {
         // 참고: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-        val todayFormat = SimpleDateFormat("yyyy/MM/dd W E", Locale.KOREA)
+        val todayFormat = SimpleDateFormat("yyyy/MM/dd W'주차' E", Locale.KOREA)
         todayFormat.format(Date()) //"2021년 10월 3일"
     }
     init {

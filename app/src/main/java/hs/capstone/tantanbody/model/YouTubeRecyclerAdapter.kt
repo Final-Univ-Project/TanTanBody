@@ -19,19 +19,21 @@ class YouTubeRecyclerAdapter(val items: List<YouTubeVideo>,
         val TAG = "YouTubeHolder"
         // (ui.xml ~~~ data.kt) 이어주기
         var isFavView = itemView.findViewById<ImageView>(R.id.isFavView)
+        var keywords = itemView.findViewById<TextView>(R.id.keywords)
         var thumbnailView = itemView.findViewById<ImageView>(R.id.thumbnailView)
         var titleView = itemView.findViewById<TextView>(R.id.titleView)
         var channelTitleView = itemView.findViewById<TextView>(R.id.channelTitleView)
 
         fun bind(video: YouTubeVideo) {
-            itemView.contentDescription = video.videoId
+            if (video.isFaverite) {
+                isFavView.visibility = View.VISIBLE
+            }
+            keywords.text = video.keywords?.joinToString(" #", "#", "", 30, "...")
 
             titleView.text = video.title
             channelTitleView.text = video.channelTitle
             Picasso.get().load(Uri.parse(video.thumbnail)).into(thumbnailView)
-            if (video.isFaverite) {
-                isFavView.visibility = View.VISIBLE
-            }
+
         }
     }
 
