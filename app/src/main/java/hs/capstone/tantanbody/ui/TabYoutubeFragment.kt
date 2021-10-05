@@ -27,7 +27,7 @@ class TabYoutubeFragment : Fragment() {
     lateinit var YTListRecyclerView: RecyclerView
     var YTList = mutableListOf<YouTubeVideo>()
 
-    private val youtubeViewModel by viewModels<YouTubeViewModel> {
+    private val model by viewModels<YouTubeViewModel> {
         YouTubeViewModelFactory((app as TTBApplication).youtubeRepository)
     }
 
@@ -38,7 +38,7 @@ class TabYoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_tab_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
-        youtubeViewModel.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).let {
+        model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).let {
             if (it == null) {
                 Toast.makeText(this.context, getString(R.string.fail_loading_youtube), Toast.LENGTH_LONG)
             } else {
@@ -50,10 +50,9 @@ class TabYoutubeFragment : Fragment() {
             layoutManager = LinearLayoutManager(this@TabYoutubeFragment.context)
             adapter = YouTubeRecyclerAdapter(YTList) { video ->
                 Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
-                buildSettingFavDialog(video.videoId, video.isFaverite).show()
+                buildSettingFavDialog(video, video.isFaverite).show()
             }
         }
-
         return layout
     }
 
@@ -63,7 +62,7 @@ class TabYoutubeFragment : Fragment() {
         this.app = context.applicationContext as Application
     }
 
-    fun buildSettingFavDialog(videoId: String, isFav: Boolean): AlertDialog.Builder {
+    fun buildSettingFavDialog(video: YouTubeVideo, isFav: Boolean): AlertDialog.Builder {
         val message = run {
             if (isFav) "즐겨찾기에서 삭제할까요?"
             else "즐겨찾기에 추가할까요?"
@@ -79,7 +78,7 @@ class TabYoutubeFragment : Fragment() {
             "확인",
             DialogInterface.OnClickListener { dialog, which ->
                 // ViewModel에 업데이트
-                youtubeViewModel.changeYoutubeVideoFav(videoId)
+                model.changeYoutubeVideoFav(video, !isFav)
             }
         )
         return favDlg

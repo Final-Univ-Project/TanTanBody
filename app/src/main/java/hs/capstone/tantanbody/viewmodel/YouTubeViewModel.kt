@@ -1,6 +1,7 @@
 package hs.capstone.tantanbody.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
@@ -18,6 +19,8 @@ import hs.capstone.tantanbody.model.data.YouTubeVideo
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     val TAG = "YouTubeViewModel"
@@ -28,11 +31,36 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     private var youtube: YouTube? = null // API 요청할 Youtube object
     var youtubeVideoMap = mutableMapOf<String, YouTubeVideo>()
 
-    fun changeYoutubeVideoFav(videoId: String) {
-        youtubeVideoMap[videoId]?.also {
-            it.isFaverite = !it.isFaverite
+    var favYoutubeVideos: LiveData<MutableMap<String, YouTubeVideo>> = repo.favYoutubeVideos
+
+    val now = run<String> {
+        val nowFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        nowFormat.format(Date())
+    }
+
+
+    fun changeYoutubeVideoFav(video: YouTubeVideo, setFav: Boolean) {
+        youtubeVideoMap[video.videoId]?.isFaverite = setFav
+        Log.d(TAG, "videoId: ${video.videoId} isFaverite: ${video.isFaverite}")
+
+        if (setFav) {
+            insertFavYouTubeVideo(video)
+        } else {
+            deleteFavYouTubeVideo(video.videoId)
         }
-        Log.d(TAG, "videoId: ${videoId} isFaverite: ${youtubeVideoMap[videoId]?.isFaverite}")
+    }
+    fun insertFavYouTubeVideo(video: YouTubeVideo) {
+        repo.insertFavYoutubeVideo(video)
+    }
+    fun deleteFavYouTubeVideo(videoId: String) {
+        repo.removeFavYouTubeVideo(videoId)
+    }
+
+    fun insertClickedYouTube(video: YouTubeVideo) {
+        repo.insertClickedYouTube(now, video)
+    }
+    fun insertDoneYouTube(video: YouTubeVideo) {
+        repo.insertClickedYouTube(now, video)
     }
 
     fun convert2YouTubeVideo(results: List<SearchResult>?): List<YouTubeVideo>? {

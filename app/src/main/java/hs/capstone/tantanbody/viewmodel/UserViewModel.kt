@@ -2,29 +2,26 @@ package hs.capstone.tantanbody.user
 
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
 import hs.capstone.tantanbody.model.UserRepository
 import hs.capstone.tantanbody.model.data.GoogleAccount
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.coroutineContext
 
 class UserViewModel(val repo: UserRepository) : ViewModel() {
-    val TAG = "RecordedViewModel"
+    val TAG = "UserViewModel"
     val LoginUser: GoogleAccount? = repo.googleLoginUser
     var goal: LiveData<String> = repo.goal
     var exerciseTimes: LiveData<Map<String, Int>> = repo.exerciseTimes
     var userWeights: LiveData<Map<String, Float>> = repo.userWeights
 
-    val today: String by lazy {
-        val todayFormat = SimpleDateFormat("yyyy/MM/dd") // 요일 추가하기
+    var today = run<String> {
+        // 참고: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+        val todayFormat = SimpleDateFormat("yyyy/MM/dd W E", Locale.KOREA)
         todayFormat.format(Date()) //"2021년 10월 3일"
     }
     init {
-
-        Log.e(TAG, "userWeights: ${userWeights.value}")
-//        repo.exerciseTimes.observeForever(Observer {
+    //        repo.exerciseTimes.observeForever(Observer {
 //            this.exerciseTimes = liveData { emit(it) }
 //        })
 //        repo.userWeights.observeForever(Observer {
