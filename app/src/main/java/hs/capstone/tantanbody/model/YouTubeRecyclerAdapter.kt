@@ -7,53 +7,51 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.api.services.youtube.model.SearchResult
-import com.google.api.services.youtube.model.Thumbnail
 import com.squareup.picasso.Picasso
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.data.YouTubeVideo
 
-class YouTubeRecyclerAdapter(private val searchResultList: List<SearchResult>?)
+class YouTubeRecyclerAdapter(val items: List<YouTubeVideo>,
+                             private val longClickListener: (video: YouTubeVideo) -> Unit)
     : RecyclerView.Adapter<YouTubeRecyclerAdapter.YouTubeHolder>() {
 
-    inner class YouTubeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class YouTubeHolder(val itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val TAG = "YouTubeHolder"
         // (ui.xml ~~~ data.kt) 이어주기
+        var isFavView = itemView.findViewById<ImageView>(R.id.isFavView)
         var thumbnailView = itemView.findViewById<ImageView>(R.id.thumbnailView)
         var titleView = itemView.findViewById<TextView>(R.id.titleView)
         var channelTitleView = itemView.findViewById<TextView>(R.id.channelTitleView)
 
-        fun bind(YTvideo: YouTubeVideo) {
-            Picasso.get().load(Uri.parse(YTvideo.thumbnail)).into(thumbnailView)
-//            thumbnailView.setImageURI(Uri.parse(YTvideo.thumbnail))
-            titleView.text = YTvideo.title
-            channelTitleView.text = YTvideo.channelTitle
+        fun bind(video: YouTubeVideo) {
+            itemView.contentDescription = video.videoId
+
+            titleView.text = video.title
+            channelTitleView.text = video.channelTitle
+            Picasso.get().load(Uri.parse(video.thumbnail)).into(thumbnailView)
+            if (video.isFaverite) {
+                isFavView.visibility = View.VISIBLE
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YouTubeHolder {
-        val layout = LayoutInflater.from(parent.context).inflate(R.layout.item_youtube_video, parent, false)
-        return YouTubeHolder(layout)
+        val layout = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_youtube_video, parent, false)
+        val viewHolder = YouTubeHolder(layout)
+
+        layout.setOnLongClickListener {
+            longClickListener.invoke(items[viewHolder.adapterPosition])
+            return@setOnLongClickListener true
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: YouTubeHolder, position: Int) {
-        searchResultList?.also {
-
-            holder.bind(it.get(position).run {
-                val thumbnail = this.snippet.thumbnails["default"] as Thumbnail
-                YouTubeVideo(
-                    videoId = "${this.id}",
-                    publishedAt = this.snippet.publishedAt,
-                    channelId = this.snippet.channelId,
-                    title = this.snippet.title,
-                    description = this.snippet.description,
-                    thumbnail = thumbnail.url,
-                    channelTitle = this.snippet.channelTitle
-                )
-            })
-        }
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return items.size
     }
 }

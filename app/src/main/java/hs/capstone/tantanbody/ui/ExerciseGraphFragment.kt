@@ -1,9 +1,8 @@
-package hs.capstone.tantanbody.ui
+package hs.capstone.tantanbody.user
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,42 +13,27 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import hs.capstone.tantanbody.R
 
-class FitnessGraphFragment : Fragment() {
-    val TAG = "FitnessGraphFragment"
+class ExerciseGraphFragment : Fragment() {
+    val TAG = "ExerciseGraphFragment"
     lateinit var barChart: BarChart
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_fitness_graph, container, false)
+        val layout = inflater.inflate(R.layout.fragment_exercise_graph, container, false)
         barChart = layout.findViewById(R.id.barChart)
 
 
-        // BarChart 데이터 가져오기
-        var workouts = mapOf(
-            0 to 23f,
-            1 to 20f,
-            2 to 30f,
-            3 to 21f,
-            4 to 16f,
-            5 to 26f,
-            6 to 18f
-        )
-//        var weekday = listOf("월", "화", "수", "목", "금", "토", "일")
-
+        var i = 0
         var entries = ArrayList<BarEntry>()
-        workouts.forEach {
-            entries.add(BarEntry(it.key.toFloat(), it.value))
+        exercises.forEach { (weekday, minute) ->
+            entries.add(BarEntry(i.toFloat(), minute.toFloat()))
+            i++
         }
 
-//        var weekdayList = ArrayList<BarEntry>()
-//        for (wd in weekday) {
-//            weekdayList.add(BarEntry(wd))
-//        }
-
         // BarChart 설정하기
-        var DSbar = BarDataSet(entries, getString(R.string.graph_label_fitness))
+        var DSbar = BarDataSet(entries, getString(R.string.graph_label_exercise))
         DSbar.color = getColorFrom(R.color.orange)
         DSbar.valueTextColor = getColorFrom(R.color.unused_content)
 
@@ -68,6 +52,10 @@ class FitnessGraphFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = FitnessGraphFragment()
+        lateinit var exercises: Map<String, Int>
+        fun newInstance(exercises: Map<String, Int>): Fragment {
+            this.exercises = exercises
+            return ExerciseGraphFragment()
+        }
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    tools:context=".ui.WeightGraphFragment">
+    tools:context=".user.WeightGraphFragment">
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChart"

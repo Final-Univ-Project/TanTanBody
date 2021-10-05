@@ -13,12 +13,12 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.model.GoogleLoginUser
+import hs.capstone.tantanbody.model.TTBApplication
+import hs.capstone.tantanbody.model.data.GoogleAccount
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
     lateinit var signInGoogle: SignInButton
-
     lateinit var mGoogleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 1
 
@@ -72,9 +72,18 @@ class LogInActivity: Activity() {
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
         }
     }
+
     fun loginFromGoogleAccount(account: GoogleSignInAccount?) {
-        account?.run {
-            GoogleLoginUser(this)
+        if (account != null) {
+            val app = this@LogInActivity.application as TTBApplication
+            app.userRepository.googleLoginUser = GoogleAccount(
+                account.displayName,
+                account.familyName,
+                account.givenName,
+                account.email,
+                account.id,
+                account.photoUrl
+            )
 
             val intent = Intent(this@LogInActivity, MainActivity::class.java)
             startActivity(intent)

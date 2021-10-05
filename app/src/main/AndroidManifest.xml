@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TantanBody">
         <activity
-            android:name=".ui.YoutubeVideoActivity"
+            android:name=".user.WeightAddActivity"
             android:exported="true" />
+
         <activity android:name=".ui.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
