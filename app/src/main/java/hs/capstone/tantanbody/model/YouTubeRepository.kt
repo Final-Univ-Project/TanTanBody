@@ -1,30 +1,38 @@
 package hs.capstone.tantanbody.model
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
 import hs.capstone.tantanbody.model.data.YouTubeVideo
 
 class YouTubeRepository {
     val TAG = "YouTubeRepository"
-    var favoriteYoutubeList = mutableListOf<YouTubeVideo>()
+    var favYoutubeVideos: MutableLiveData<MutableMap<String, YouTubeVideo>> =
+        loadFavYouTubeVideo() as MutableLiveData<MutableMap<String, YouTubeVideo>>
+    var exerciseYouTubeVideos: MutableLiveData<MutableList<YouTubeVideo>> =
+        loadExercisedVideos() as MutableLiveData<MutableList<YouTubeVideo>>
 
-    // List<SearchResult>를 List<YouTubeVideo>로 변환하는 메소드
-    fun insertFavoriteYoutubeVideo(searchResult: SearchResult) {
-//        while (searchResults.hasNext()) {
-        val signleVideo = searchResult //.next()
-        val thumbnail = signleVideo.snippet.thumbnails["default"] as Thumbnail?
-
-        val video = YouTubeVideo(
-            videoId = signleVideo.id.videoId,
-            publishedAt = signleVideo.snippet.publishedAt,
-            channelId = signleVideo.snippet.channelId,
-            title = signleVideo.snippet.title,
-            description = signleVideo.snippet.description,
-            thumbnail = thumbnail!!.url,
-            channelTitle = signleVideo.snippet.channelTitle
-        )
-        favoriteYoutubeList.add(video)
+    fun loadFavYouTubeVideo() = liveData<MutableMap<String, YouTubeVideo>> {
+        emit(mutableMapOf())
+    }
+    fun insertFavYoutubeVideo(video: YouTubeVideo) {
+        Log.d(TAG, "insert videoId: ${video.videoId}")
+        favYoutubeVideos.value?.put(video.videoId, video)
+    }
+    fun removeFavYouTubeVideo(videoId: String) {
+        Log.d(TAG, "remove videoId: ${videoId}")
+        favYoutubeVideos.value?.remove(videoId)
     }
 
-
+    fun loadExercisedVideos() = liveData<MutableList<YouTubeVideo>>{
+        emit(mutableListOf())
+    }
+    fun insertClickedYouTube(now: String, video: YouTubeVideo) {
+        Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
+    }
+    fun insertDoneYouTube(now: String, video: YouTubeVideo) {
+        Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
+    }
 }

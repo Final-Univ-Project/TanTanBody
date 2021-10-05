@@ -1,5 +1,6 @@
 package hs.capstone.tantanbody.user
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
+import hs.capstone.tantanbody.ui.MainActivity
 import java.time.LocalDateTime
 
 class WeightAddActivity : AppCompatActivity() {
@@ -35,7 +37,7 @@ class WeightAddActivity : AppCompatActivity() {
             WeightGraphFragment.newInstance(model.userWeights.value ?: mapOf()))
 
         weightAddDay.text = model.today //오늘날짜
-        weightAddPicker.minValue = 10000 //kg
+        weightAddPicker.maxValue = 10000 //kg
         weightAddPicker.minValue = 1
         weightAddPicker.value = 50
         weightAddPicker.wrapSelectorWheel = false
@@ -49,6 +51,8 @@ class WeightAddActivity : AppCompatActivity() {
             Log.d(TAG, "weightPicker.display: ${weightAddPicker.display}")
 
             model.insertWeight(weightAddPicker.value.toFloat())
+            val intent = Intent(baseContext, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 

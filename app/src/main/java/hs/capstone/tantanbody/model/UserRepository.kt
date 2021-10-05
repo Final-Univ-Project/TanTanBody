@@ -22,11 +22,6 @@ class UserRepository {
     var userWeights: MutableLiveData<Map<String, Float>> =
         loadUserWeights() as MutableLiveData<Map<String, Float>>
 
-//    init {
-//        loadExerciseTimes()
-//        loadUserWeights()
-//    }
-
     fun loadGoal() = liveData<String> {
         ""
     }
@@ -54,7 +49,6 @@ class UserRepository {
             "일" to 40f
         ) ?: mapOf())
         Log.e(TAG, "exerciseTimes: ${userWeights.value}")
-
     }
 
     fun setGoal(goal: String) {
