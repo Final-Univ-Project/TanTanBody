@@ -7,10 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import hs.capstone.tantanbody.R
-import hs.capstone.tantanbody.model.data.DietDto
-import hs.capstone.tantanbody.model.data.FoodDto
-import hs.capstone.tantanbody.model.data.RecentFoodDto
-import hs.capstone.tantanbody.model.data.UserDto
+import hs.capstone.tantanbody.model.GoogleLoginRepository
+import hs.capstone.tantanbody.model.data.*
 import hs.capstone.tantanbody.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -96,6 +94,7 @@ class MainActivity : AppCompatActivity() {
      *
      * 사용자 email을 파라미터로 넘겨야 함
      */
+
     val data2 = MutableLiveData<DietDto>()
     fun getDietList(): MutableLiveData<DietDto> {
         val call = RetrofitClient.myTestClientService
