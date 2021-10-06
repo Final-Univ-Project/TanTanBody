@@ -80,5 +80,17 @@ class LogInActivity: Activity() {
         }
 
     }
+/*
+    *//**
+     * 구글로 로그인 패스 후
+     * 메인 화면으로 넘어갈 수 있도록 만든 function
+     *//*
+    fun loginFromGoogleAccount2() {
+        run {
+            //myAppId = "pigismile@gmail.com"
+            val intent = Intent(this@LogInActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
 
+    }*/
 }
