@@ -9,7 +9,7 @@ object RetrofitClient {
     // private const val BASE_URL = ""
     private val myTestClient: Retrofit.Builder by lazy{
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create()
-        Retrofit.Builder().baseUrl("")
+        Retrofit.Builder().baseUrl("http://192.168.10.27:8080/")
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
     val myTestClientService: RetrofitService by lazy {
