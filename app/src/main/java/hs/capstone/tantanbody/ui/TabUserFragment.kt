@@ -18,11 +18,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
-import kotlinx.coroutines.flow.flowOf
 
 class TabUserFragment : Fragment() {
     val TAG = "TabUserFragment"
@@ -131,7 +128,7 @@ class TabUserFragment : Fragment() {
         if (goal.isNullOrEmpty()) {
             goalBrief.visibility = View.GONE
         } else {
-            goalBrief.text = form.format(model.LoginUser?.displayName, goal)
+            goalBrief.text = form.format(model.loginUser?.userName, goal)
             goalBrief.visibility = View.VISIBLE
         }
     }

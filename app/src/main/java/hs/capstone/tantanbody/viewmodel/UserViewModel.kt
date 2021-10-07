@@ -1,16 +1,15 @@
 package hs.capstone.tantanbody.user
 
-import android.util.Log
 import androidx.lifecycle.*
 import hs.capstone.tantanbody.model.UserRepository
-import hs.capstone.tantanbody.model.data.GoogleAccount
+import hs.capstone.tantanbody.model.data.UserDto
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class UserViewModel(val repo: UserRepository) : ViewModel() {
     val TAG = "UserViewModel"
-    val LoginUser: GoogleAccount? = repo.googleLoginUser
+    val loginUser: UserDto? = repo.userDto
     var goal: LiveData<String> = repo.goal
     var exerciseTimes: LiveData<Map<String, Int>> = repo.exerciseTimes
     var userWeights: LiveData<Map<String, Float>> = repo.userWeights

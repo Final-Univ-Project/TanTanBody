@@ -14,7 +14,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
-import hs.capstone.tantanbody.model.data.GoogleAccount
+import hs.capstone.tantanbody.model.data.UserDto
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
@@ -76,13 +76,10 @@ class LogInActivity: Activity() {
     fun loginFromGoogleAccount(account: GoogleSignInAccount?) {
         if (account != null) {
             val app = this@LogInActivity.application as TTBApplication
-            app.userRepository.googleLoginUser = GoogleAccount(
-                account.displayName,
-                account.familyName,
-                account.givenName,
-                account.email,
-                account.id,
-                account.photoUrl
+            app.userRepository.userDto = UserDto(
+                userEmail = account.email,
+                userName = account.displayName,
+                userPhoto = account.photoUrl.toString()
             )
 
             val intent = Intent(this@LogInActivity, MainActivity::class.java)
