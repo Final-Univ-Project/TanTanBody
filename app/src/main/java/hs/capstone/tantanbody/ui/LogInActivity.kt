@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -15,6 +16,8 @@ import com.google.android.gms.tasks.Task
 import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
 import hs.capstone.tantanbody.model.data.UserDto
+import hs.capstone.tantanbody.user.UserViewModel
+import hs.capstone.tantanbody.user.UserViewModelFactory
 
 class LogInActivity: Activity() {
     val TAG = "LogInActivity"
@@ -76,11 +79,11 @@ class LogInActivity: Activity() {
     fun loginFromGoogleAccount(account: GoogleSignInAccount?) {
         if (account != null) {
             val app = this@LogInActivity.application as TTBApplication
-            app.userRepository.userDto = UserDto(
+            app.userRepository.checkIsSignedUser(UserDto(
                 userEmail = account.email,
                 userName = account.displayName,
                 userPhoto = account.photoUrl.toString()
-            )
+            ))
 
             val intent = Intent(this@LogInActivity, MainActivity::class.java)
             startActivity(intent)

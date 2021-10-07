@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class UserRepository {
     val TAG = "UserRepository"
-    var userDto: UserDto ?= null // getUsers()
+    var userDto: UserDto ?= null
     var goal: MutableLiveData<String> = loadGoal() as MutableLiveData<String>
     var exerciseTimes: MutableLiveData<Map<String, Int>> =
         loadExerciseTimes() as MutableLiveData<Map<String, Int>>
@@ -58,6 +58,17 @@ class UserRepository {
     fun insertWeight(date: String, kg: Float) {
         // 위와 동일
         Log.d(TAG, "date: ${date}, kg: ${kg.toDouble()}")
+    }
+
+    fun checkIsSignedUser(user: UserDto) {
+        val signedUser = getUsers().value
+        if (signedUser == null) {
+            this.userDto = user
+            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+        } else {
+            this.userDto = signedUser
+            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+        }
     }
 
 

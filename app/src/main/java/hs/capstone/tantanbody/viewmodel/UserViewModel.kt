@@ -28,15 +28,6 @@ class UserViewModel(val repo: UserRepository) : ViewModel() {
 //        })
     }
 
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun setToday(): String {
-//        // Q. 코루틴에서 앱 시작/종료 알 수 있나?
-//        enterTime = LocalDateTime.now() // 년월일 시간분
-//        Log.d(TAG, "enterTime: ${enterTime}")
-//        return enterTime.toString()
-//    }
-
     fun setGoal(goal: String) {
         repo.setGoal(goal)
     }
