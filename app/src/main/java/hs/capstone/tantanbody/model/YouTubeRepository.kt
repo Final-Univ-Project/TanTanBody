@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
 import hs.capstone.tantanbody.model.data.YouTubeVideo
+import java.util.*
 
 class YouTubeRepository {
     val TAG = "YouTubeRepository"
@@ -29,10 +30,10 @@ class YouTubeRepository {
     fun loadExercisedVideos() = liveData<MutableList<YouTubeVideo>>{
         emit(mutableListOf())
     }
-    fun insertClickedYouTube(now: String, video: YouTubeVideo) {
+    fun insertClickedYouTube(now: Date, video: YouTubeVideo) {
         Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
     }
-    fun insertDoneYouTube(now: String, video: YouTubeVideo) {
+    fun insertDoneYouTube(now: Date, video: YouTubeVideo) {
         Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
     }
 }

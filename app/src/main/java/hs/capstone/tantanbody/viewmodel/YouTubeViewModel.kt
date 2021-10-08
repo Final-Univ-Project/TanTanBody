@@ -35,9 +35,11 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
 
     var favYoutubeVideos: LiveData<MutableMap<String, YouTubeVideo>> = repo.favYoutubeVideos
 
-    val now = run<String> {
-        val nowFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-        nowFormat.format(Date())
+    fun getInterTime(inDate: Long, outDate: Long): Float {
+        val diffMillies = Math.abs(inDate - outDate)
+        val sec = diffMillies/1000
+        val min = sec/60
+        return "${min}.${sec}".toFloat()
     }
 
 
@@ -59,20 +61,16 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     }
 
     fun insertClickedYouTube(video: YouTubeVideo) {
-        repo.insertClickedYouTube(now, video)
+        repo.insertClickedYouTube(Date(), video)
     }
     fun insertDoneYouTube(video: YouTubeVideo) {
-        repo.insertClickedYouTube(now, video)
+        repo.insertClickedYouTube(Date(), video)
     }
 
     fun getYouTubeVideoKeywords(sentence: String): List<String> {
         var komoran = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence)
-        Log.e(TAG, "** sentence: ${sentence}")
-        Log.e(TAG, "** nouns: ${komoran.nouns}")
-
-//        komoran.tokenList.forEach { token ->
-//            Log.e(TAG, "morph: ${token.morph} pos: ${token.pos}")
-//        }
+        Log.d(TAG, "** sentence: ${sentence}")
+        Log.d(TAG, "** nouns: ${komoran.nouns}")
         return komoran.nouns
     }
     fun convert2YouTubeVideo(results: List<SearchResult>): List<YouTubeVideo> {

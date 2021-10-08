@@ -5,6 +5,7 @@
 
     <!-- LogInActivity -->
     <string name="fail_google_login">Google 로그인을 완료해주세요</string>
+    <string name="blocking_title">인터넷이 \n연결되지 않음</string>
     <!-- UserActivity -->
     <string name="goal_title">운동 목표</string>
     <string name="goal_dialog_title">운동 목표 설정</string>

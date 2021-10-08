@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hs.capstone.tantanbody">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,9 +15,11 @@
         android:theme="@style/Theme.TantanBody"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.BlockingActivity"
+            android:exported="true" />
+        <activity
             android:name=".user.WeightAddActivity"
             android:exported="true" />
-
         <activity android:name=".ui.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
