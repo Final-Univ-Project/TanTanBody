@@ -88,7 +88,6 @@ class LogInActivity: Activity() {
             val intent = Intent(this@LogInActivity, MainActivity::class.java)
             startActivity(intent)
         }
-
     }
 
 }

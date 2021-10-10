@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import hs.capstone.tantanbody.model.data.*
-import hs.capstone.tantanbody.network.RetrofitClient
+import hs.capstone.tantanbody.model.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,25 +70,39 @@ class UserRepository {
     }
 
     fun checkIsSignedUser(user: UserDto) {
-        val signedUser = getUsers().value
-        if (signedUser == null) {
-            this.userDto = user
-            insertUser(user)
-            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+        userDto = user
+
+        val code = saveUser().value // 등록된 사용자인지 확인
+        Log.e(TAG, "code : ${code}")
+        if (code == "OK") {
+            val registeredUser = getUsers()
+            // TODO. registeredUser.value.userGoal 가져와 저장하기
+            Log.e(TAG, "등록된 사용자인 경우 ${user.userEmail}")
         } else {
-            this.userDto = signedUser
-            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+            Log.e(TAG, "최초 로그인 인 경우 ${user.userEmail}")
         }
     }
-    fun insertUser(userDto: UserDto) {
-    }
-
 
     /**
      * 등록된 사용자의 정보를 가져옴
      *
      * 신규 회원인지 아니면 있는 회원인지 그냥 관례상(?) 확인 하기
      */
+    val data0 = MutableLiveData<String>()
+    fun saveUser(): MutableLiveData<String>{
+        val call = RetrofitClient.myTestClientService
+        call.saveUser().enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Log.d("save Users 결과", "성공 : ${response.raw()}")
+                Log.d("가져온 데이터", "${response.body()}")
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("save Users 결과", "실패 : $t")
+            }
+        })
+        return data0
+    }
+
     val data1 = MutableLiveData<UserDto>()
     fun getUsers(): MutableLiveData<UserDto>{
         val call = RetrofitClient.myTestClientService

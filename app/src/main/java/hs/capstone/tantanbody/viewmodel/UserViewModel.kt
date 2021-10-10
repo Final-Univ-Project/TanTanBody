@@ -1,11 +1,8 @@
 package hs.capstone.tantanbody.user
 
-import android.util.Log
 import androidx.lifecycle.*
 import hs.capstone.tantanbody.model.UserRepository
 import hs.capstone.tantanbody.model.data.UserDto
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*

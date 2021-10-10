@@ -4,14 +4,17 @@ import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hs.capstone.tantanbody.R
@@ -25,7 +28,8 @@ class TabYoutubeFragment : Fragment() {
     val TAG = "YoutubeFragment"
     lateinit var app: Application
     lateinit var YTListRecyclerView: RecyclerView
-    var YTList = mutableListOf<YouTubeVideo>()
+
+    lateinit var YTList: MutableList<YouTubeVideo>
 
     private val model by viewModels<YouTubeViewModel> {
         YouTubeViewModelFactory((app as TTBApplication).youtubeRepository)
@@ -38,19 +42,23 @@ class TabYoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_tab_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
-        model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).let {
-            if (it == null) {
-                Toast.makeText(this.context, getString(R.string.fail_loading_youtube), Toast.LENGTH_LONG)
-            } else {
-                YTList.addAll(it)
-            }
-        }
+
+        model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key))
+        YTList = model.youtubeVideos.value ?: mutableListOf()
+
+        model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
+            YTList = videos
+        })
 
         YTListRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@TabYoutubeFragment.context)
             adapter = YouTubeRecyclerAdapter(YTList) { video ->
                 Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
                 buildSettingFavDialog(video, video.isFaverite).show()
+
+                model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
+                    YTList = videos
+                })
             }
         }
         return layout
@@ -78,7 +86,11 @@ class TabYoutubeFragment : Fragment() {
             "확인",
             DialogInterface.OnClickListener { dialog, which ->
                 // ViewModel에 업데이트
-                model.changeYoutubeVideoFav(video, !isFav)
+                if (isFav) {
+                    model.deleteFavYouTubeVideo(video = video)
+                } else {
+                    model.insertFavYouTubeVideo(video = video)
+                }
             }
         )
         return favDlg
