@@ -61,6 +61,7 @@ class UserRepository {
     }
 
     fun checkIsSignedUser(user: UserDto) {
+        //val signedUser = login(사용자이메일).value
         val signedUser = getUsers().value
         if (signedUser == null) {
             this.userDto = user
@@ -71,6 +72,27 @@ class UserRepository {
         }
     }
 
+    /**
+     * back에서 해당 사용자가 기존에 있던 사용자인지, 처음 사용하는 사용자인지 판단해서
+     * 처음 사용하는 사용자면 정보를 저장하고 ok
+     * 기존에 사용했던 사용자면 바로 ok
+     *
+     * loginChk(UserDto) -> 선언 방법을 몰라서...
+     */
+    /*val data0 = MutableLiveData<String>()
+    fun loginChk(): MutableLiveData<String>{
+        val call = RetrofitClient.myTestClientService
+        call.loginChk().enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Log.d("get Users 결과", "성공 : ${response.raw()}")
+                Log.d("가져온 데이터", "${response.body()}")
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("get Users 결과", "실패 : $t")
+            }
+        })
+        return data0
+    }*/
 
     /**
      * 등록된 사용자의 정보를 가져옴
