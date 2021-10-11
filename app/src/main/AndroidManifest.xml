@@ -2,7 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hs.capstone.tantanbody">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START"/>
+        </intent>
+    </queries>
 
     <application
         android:name=".model.TTBApplication"
@@ -13,8 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TantanBody"
         android:usesCleartextTraffic="true">
+
+
         <activity
-            android:name=".user.WeightAddActivity"
+            android:name=".ui.BlockingActivity"
             android:exported="true" />
 
         <activity android:name=".ui.LogInActivity">
@@ -24,7 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.MainActivity" />
+        <activity android:name=".user.WeightAddActivity" />
+        <activity
+            android:name=".ui.YoutubeVideoActivity"
+            android:theme="@style/FullScreenTheme"/>
+
     </application>
 
 </manifest>

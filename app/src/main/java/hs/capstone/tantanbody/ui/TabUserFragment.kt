@@ -39,8 +39,6 @@ class TabUserFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.app = context.applicationContext as Application
-        userWeights = model.userWeights.value ?: mapOf()
-        userExercises = model.exerciseTimes.value ?: mapOf()
     }
 
     override fun onCreateView(
@@ -63,6 +61,9 @@ class TabUserFragment : Fragment() {
         model.exerciseTimes.observe(viewLifecycleOwner, Observer { mins ->
             userExercises = mins
         })
+
+        userWeights = model.userWeights.value ?: mapOf()
+        userExercises = model.exerciseTimes.value ?: mapOf()
 
         goalTitleTv.setOnClickListener {
             buildEditingGoalDialog().show()

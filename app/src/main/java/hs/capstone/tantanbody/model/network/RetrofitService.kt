@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.network
+package hs.capstone.tantanbody.model.network
 
 import hs.capstone.tantanbody.model.data.DietDto
 import hs.capstone.tantanbody.model.data.FoodDto
@@ -17,8 +17,8 @@ interface RetrofitService {
     @GET("users")
     fun getUsers(): Call<ArrayList<UserDto>>
 
-    @POST
-    fun saveUser()
+    @POST("login")
+    fun saveUser(): Call<String>
 
     //== 식단 화면 ==//
     @GET("diet") //사실상 post로 바꿔야함 ... back도 마찬가지

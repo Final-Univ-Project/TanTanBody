@@ -15,11 +15,13 @@ import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.TTBApplication
 import hs.capstone.tantanbody.ui.MainActivity
 import java.time.LocalDateTime
+import java.util.*
 
 class WeightAddActivity : AppCompatActivity() {
     val TAG = "WeightAddActivity"
     lateinit var weightAddDay: TextView
-    lateinit var weightAddPicker: NumberPicker
+    lateinit var weightPicker: NumberPicker
+    lateinit var weightDecimalPicker: NumberPicker
     lateinit var setWeightBtn: Button
 
     private val model by viewModels<UserViewModel> {
@@ -30,27 +32,30 @@ class WeightAddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weight_add)
         weightAddDay = findViewById(R.id.weightAddDay)
-        weightAddPicker = findViewById(R.id.weightAddPicker)
+        weightPicker = findViewById(R.id.weightPicker)
+        weightDecimalPicker = findViewById(R.id.weightDecimalPicker)
         setWeightBtn = findViewById(R.id.setWeightBtn)
 
         loadWeightGraphFragment(
             WeightGraphFragment.newInstance(model.userWeights.value ?: mapOf()))
 
-        weightAddDay.text = model.today //오늘날짜
-        weightAddPicker.maxValue = 10000 //kg
-        weightAddPicker.minValue = 1
-        weightAddPicker.value = 50
-        weightAddPicker.wrapSelectorWheel = false
-
-        weightAddPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            Log.d(TAG, "oldVal: ${oldVal} newVal: ${newVal}")
-        }
+        weightAddDay.text = model.getWeekOfMonth(Date().time) //오늘날짜
+        weightPicker.minValue = 20
+        weightPicker.maxValue = 300 //kg
+        weightPicker.value = 50
+        weightPicker.wrapSelectorWheel = false
+        weightDecimalPicker.minValue = 0
+        weightDecimalPicker.maxValue = 9
+        weightDecimalPicker.value = 0
+        weightDecimalPicker.wrapSelectorWheel = false
 
         setWeightBtn.setOnClickListener {
-            Log.d(TAG, "weightPicker.value: ${weightAddPicker.value}")
-            Log.d(TAG, "weightPicker.display: ${weightAddPicker.display}")
+            val weight = "${weightPicker.value}.${weightDecimalPicker.value}".toFloat()
+            Log.d(TAG, "weightPicker: ${weightPicker.value}")
+            Log.d(TAG, "weightDecimalPicker: ${weightDecimalPicker.value}")
+            Log.d(TAG, "weight: ${weight}")
 
-            model.insertWeight(weightAddPicker.value.toFloat())
+            model.insertWeight(weight)
             val intent = Intent(baseContext, MainActivity::class.java)
             startActivity(intent)
         }

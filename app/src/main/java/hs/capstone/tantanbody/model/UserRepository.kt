@@ -4,79 +4,105 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import hs.capstone.tantanbody.model.data.*
-import hs.capstone.tantanbody.network.RetrofitClient
+import hs.capstone.tantanbody.model.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class UserRepository {
     val TAG = "UserRepository"
     var userDto: UserDto ?= null
     var goal: MutableLiveData<String> = loadGoal() as MutableLiveData<String>
-    var exerciseTimes: MutableLiveData<Map<String, Int>> =
-        loadExerciseTimes() as MutableLiveData<Map<String, Int>>
-    var userWeights: MutableLiveData<Map<String, Float>> =
-        loadUserWeights() as MutableLiveData<Map<String, Float>>
+    var exerciseTimes: MutableLiveData<MutableMap<String, Int>> =
+        loadExerciseTimes() as MutableLiveData<MutableMap<String, Int>>
+    var userWeights: MutableLiveData<MutableMap<String, Float>> =
+        loadUserWeights() as MutableLiveData<MutableMap<String, Float>>
 
     fun loadGoal() = liveData<String> {
         ""
     }
-    fun loadExerciseTimes() = liveData<Map<String, Int>> {
-        // 월~일 고정된 크기의 이번주 운동시간
-        emit(mapOf<String, Int>(
-            "월" to 23,
-            "화" to 20,
-            "수" to 30,
-            "목" to 21,
-            "금" to 16,
-            "토" to 26,
-            "일" to 18
-        ) ?: mapOf())
-        Log.e(TAG, "exerciseTimes: ${exerciseTimes.value}")
-    }
-    fun loadUserWeights() = liveData<Map<String, Float>> {
-        emit(mapOf<String, Float>(
-            "월" to 45f,
-            "화" to 52f,
-            "수" to 54.8f,
-            "목" to 48f,
-            "금" to 60f,
-            "토" to 42f,
-            "일" to 40f
-        ) ?: mapOf())
-        Log.e(TAG, "exerciseTimes: ${userWeights.value}")
-    }
-
     fun setGoal(goal: String) {
         this.goal.value = goal
     }
-    fun insertExerciseTime(date: String, minute: Int) {
+    fun deleteGoal() {
+        this.goal.value = ""
+    }
+
+    fun getWeekdayByDate(date: Long): String {
+        return SimpleDateFormat("E", Locale.KOREA).format(Date(date))
+    }
+    fun loadExerciseTimes() = liveData<MutableMap<String, Int>> { // check!!!!!
+        val dayMillies = 86400000
+        // 월~일 고정된 크기의 이번주 운동시간
+        emit(mutableMapOf<String, Int>(
+            getWeekdayByDate(Date(Date().time - dayMillies*6).time) to 23,
+            getWeekdayByDate(Date(Date().time - dayMillies*5).time) to 20,
+            getWeekdayByDate(Date(Date().time - dayMillies*4).time) to 30,
+            getWeekdayByDate(Date(Date().time - dayMillies*3).time) to 21,
+            getWeekdayByDate(Date(Date().time - dayMillies*2).time) to 16,
+            getWeekdayByDate(Date(Date().time - dayMillies).time) to 26,
+            getWeekdayByDate(Date().time) to 18
+        ) ?: mutableMapOf())
+        Log.e(TAG, "exerciseTimes: ${exerciseTimes.value}")
+    }
+    fun insertExerciseTime(date: Date, minute: Int) {
         this.exerciseTimes.value
         // 같은 날짜면 업데이트, 없으면 추가
         Log.d(TAG, "date: ${date}, minute: ${minute}")
     }
-    fun insertWeight(date: String, kg: Float) {
-        // 위와 동일
-        Log.d(TAG, "date: ${date}, kg: ${kg.toDouble()}")
+
+    fun loadUserWeights() = liveData<MutableMap<String, Float>> {
+        val dayMillies = 86400000
+        emit(mutableMapOf<String, Float>(
+            getWeekdayByDate(Date(Date().time - dayMillies*4).time) to 45f,
+            getWeekdayByDate(Date(Date().time - dayMillies*3).time) to 52f,
+            getWeekdayByDate(Date(Date().time - dayMillies*2).time) to 54.8f,
+            getWeekdayByDate(Date(Date().time - dayMillies).time) to 48f
+        ) ?: mutableMapOf())
+        Log.e(TAG, "exerciseTimes: ${userWeights.value}")
+    }
+    fun insertWeight(date: Date, kg: Float) {
+        userWeights.value?.put(getWeekdayByDate(date.time), kg)
+        Log.d(TAG, "date: ${date.time}, kg: ${kg.toDouble()}")
     }
 
     fun checkIsSignedUser(user: UserDto) {
-        val signedUser = getUsers().value
-        if (signedUser == null) {
-            this.userDto = user
-            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+        userDto = user
+
+        val code = saveUser().value // 등록된 사용자인지 확인
+        Log.e(TAG, "code : ${code}")
+        if (code == "OK") {
+            val registeredUser = getUsers()
+            // TODO. registeredUser.value.userGoal 가져와 저장하기
+            Log.e(TAG, "등록된 사용자인 경우 ${user.userEmail}")
         } else {
-            this.userDto = signedUser
-            Log.d(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+            Log.e(TAG, "최초 로그인 인 경우 ${user.userEmail}")
         }
     }
-
 
     /**
      * 등록된 사용자의 정보를 가져옴
      *
      * 신규 회원인지 아니면 있는 회원인지 그냥 관례상(?) 확인 하기
      */
+    val data0 = MutableLiveData<String>()
+    fun saveUser(): MutableLiveData<String>{
+        val call = RetrofitClient.myTestClientService
+        call.saveUser().enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Log.d("save Users 결과", "성공 : ${response.raw()}")
+                Log.d("가져온 데이터", "${response.body()}")
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("save Users 결과", "실패 : $t")
+            }
+        })
+        return data0
+    }
+
     val data1 = MutableLiveData<UserDto>()
     fun getUsers(): MutableLiveData<UserDto>{
         val call = RetrofitClient.myTestClientService

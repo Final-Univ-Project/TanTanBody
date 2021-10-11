@@ -11,32 +11,22 @@ class UserViewModel(val repo: UserRepository) : ViewModel() {
     val TAG = "UserViewModel"
     val loginUser: UserDto? = repo.userDto
     var goal: LiveData<String> = repo.goal
-    var exerciseTimes: LiveData<Map<String, Int>> = repo.exerciseTimes
-    var userWeights: LiveData<Map<String, Float>> = repo.userWeights
+    var exerciseTimes: MutableLiveData<MutableMap<String, Int>> = repo.exerciseTimes
+    var userWeights: MutableLiveData<MutableMap<String, Float>> = repo.userWeights
 
-    var today = run<String> {
-        // 참고: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-        val todayFormat = SimpleDateFormat("yyyy/MM/dd W'주차' E", Locale.KOREA)
-        todayFormat.format(Date()) //"2021년 10월 3일"
-    }
-    init {
-    //        repo.exerciseTimes.observeForever(Observer {
-//            this.exerciseTimes = liveData { emit(it) }
-//        })
-//        repo.userWeights.observeForever(Observer {
-//            this.userWeights = liveData { emit(it) }
-//        })
+
+    fun getWeekOfMonth(date: Long): String {
+        return SimpleDateFormat("M'월' W'주차'", Locale.KOREA).format(Date(date))
     }
 
     fun setGoal(goal: String) {
         repo.setGoal(goal)
     }
     fun insertExerciseTime(minute: Int) {
-        // 오늘날짜(application에 있음) 랑 같이 전달
-        repo.insertExerciseTime(today, minute) // 분(minute)으로 변환
+        repo.insertExerciseTime(Date(), minute)
     }
     fun insertWeight(kg: Float) {
-        repo.insertWeight(today, kg)
+        repo.insertWeight(Date(), kg)
     }
 }
 

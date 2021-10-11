@@ -1,7 +1,10 @@
 package hs.capstone.tantanbody.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
@@ -31,56 +34,50 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     private val JSON_FACTORY: JsonFactory = JacksonFactory() // JSON factory
     private var NUMBER_OF_VIDEOS_RETURNED: Long = 5 // (페이지당 최대 50)
     private var youtube: YouTube? = null // API 요청할 Youtube object
-    var youtubeVideoMap = mutableMapOf<String, YouTubeVideo>()
+    var youtubeVideos = MutableLiveData<MutableList<YouTubeVideo>>()
 
-    var favYoutubeVideos: LiveData<MutableMap<String, YouTubeVideo>> = repo.favYoutubeVideos
-
-    val now = run<String> {
-        val nowFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-        nowFormat.format(Date())
-    }
+    var favYoutubeVideos: LiveData<MutableList<YouTubeVideo>> = repo.favYoutubeVideos
 
 
-    fun changeYoutubeVideoFav(video: YouTubeVideo, setFav: Boolean) {
-        youtubeVideoMap[video.videoId]?.isFaverite = setFav
-        Log.d(TAG, "videoId: ${video.videoId} isFaverite: ${video.isFaverite}")
-
-        if (setFav) {
-            insertFavYouTubeVideo(video)
-        } else {
-            deleteFavYouTubeVideo(video.videoId)
-        }
-    }
     fun insertFavYouTubeVideo(video: YouTubeVideo) {
         repo.insertFavYoutubeVideo(video)
+
+        youtubeVideos.value?.
+        filter { item -> item.videoId == video.videoId }?.
+        forEach {
+            it.isFaverite = true
+        }
     }
-    fun deleteFavYouTubeVideo(videoId: String) {
-        repo.removeFavYouTubeVideo(videoId)
+    fun deleteFavYouTubeVideo(video: YouTubeVideo) {
+        repo.removeFavYouTubeVideo(video)
+
     }
 
     fun insertClickedYouTube(video: YouTubeVideo) {
-        repo.insertClickedYouTube(now, video)
+        repo.insertClickedYouTube(Date(), video)
     }
     fun insertDoneYouTube(video: YouTubeVideo) {
-        repo.insertClickedYouTube(now, video)
+        repo.insertClickedYouTube(Date(), video)
+    }
+    fun getInterTime(inDate: Long, outDate: Long): Float {
+        val diffMillies = Math.abs(inDate - outDate)
+        val sec = diffMillies/1000
+        val min = sec/60
+        return "${min}.${sec}".toFloat()
     }
 
     fun getYouTubeVideoKeywords(sentence: String): List<String> {
         var komoran = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence)
-        Log.e(TAG, "** sentence: ${sentence}")
-        Log.e(TAG, "** nouns: ${komoran.nouns}")
-
-//        komoran.tokenList.forEach { token ->
-//            Log.e(TAG, "morph: ${token.morph} pos: ${token.pos}")
-//        }
+        Log.d(TAG, "** sentence: ${sentence}")
+        Log.d(TAG, "** nouns: ${komoran.nouns}")
         return komoran.nouns
     }
-    fun convert2YouTubeVideo(results: List<SearchResult>): List<YouTubeVideo> {
+    fun bind2YouTubeVideo(results: List<SearchResult>) {
         results.forEach {
             val keywords = getYouTubeVideoKeywords(it.snippet.title)
             val thumbnail = it.snippet.thumbnails["high"] as Thumbnail
             // YouTubeVideo() 바인딩
-            youtubeVideoMap[it.id.videoId] = YouTubeVideo(
+            youtubeVideos.value!!.add(YouTubeVideo(
                 videoId = it.id.videoId,
                 publishedAt = it.snippet.publishedAt,
                 channelId = it.snippet.channelId,
@@ -89,24 +86,25 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
                 thumbnail = thumbnail.url,
                 channelTitle = it.snippet.channelTitle,
                 keywords = keywords
-            )
+            ))
         }
-        return youtubeVideoMap.values.toList()
     }
 
     // HTTP를 통해 유튜브 검색 목록 가져오는 메소드
-    fun loadYouTubeSearchItems(apiKey: String): List<YouTubeVideo>? {
+    fun loadYouTubeSearchItems(apiKey: String) {
+        if (youtubeVideos.value != null) {
+            // 추가로 영상load
+        }
+
         try {
-            val YoutubeVideos = runBlocking {
+            runBlocking {
                 val resultResponse = buildYouTubeSearchItems(apiKey = apiKey).await()
                 Log.d(TAG, "isEmpty: ${resultResponse?.isEmpty()}")
                 Log.d(TAG, "items.size: ${resultResponse.items.size}")
 
-                convert2YouTubeVideo(resultResponse.items)
+                youtubeVideos.value = mutableListOf()
+                bind2YouTubeVideo(resultResponse.items)
             }
-
-            return YoutubeVideos
-
         } catch (e: GoogleJsonResponseException) {
             Log.e(TAG, "[service error]: ${e.details.code} : ${e.details.message}")
         } catch (e: IOException) {
@@ -115,9 +113,7 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
             Log.e(TAG, "[Throwed error]: ${t.message}")
             t.printStackTrace()
         }
-        return null
     }
-
     suspend fun buildYouTubeSearchItems(query: String = "운동", apiKey: String) = scope.async {
         youtube = YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HttpRequestInitializer {
             @Throws(IOException::class)

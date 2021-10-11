@@ -13,19 +13,16 @@
         <entry key="app/src/main/res/drawable/ic_tab_fitness_foreground.xml" value="0.2453125" />
         <entry key="app/src/main/res/drawable/ic_tab_meal.xml" value="0.2453125" />
         <entry key="app/src/main/res/drawable/ic_tab_setting_foreground.xml" value="0.2453125" />
-        <entry key="app/src/main/res/layout/activity_blocking.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_weight_add.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_exercise_graph.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_weight_add.xml" value="0.17231682990666275" />
         <entry key="app/src/main/res/layout/fragment_fitness_graph.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.24270833333333333" />
         <entry key="app/src/main/res/layout/fragment_tab_record.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_tab_user.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_tab_youtube.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_weight_graph.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_tab_user.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_weight_graph.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_youtube.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_youtube_video.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_youtube_video.xml" value="0.1" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_email.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_lock.xml" value="0.25833333333333336" />

@@ -1,4 +1,4 @@
-package hs.capstone.tantanbody.network
+package hs.capstone.tantanbody.model.network
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
