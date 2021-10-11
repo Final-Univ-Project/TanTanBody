@@ -12,6 +12,7 @@ import hs.capstone.tantanbody.R
 import hs.capstone.tantanbody.model.data.YouTubeVideo
 
 class YouTubeRecyclerAdapter(val items: List<YouTubeVideo>,
+                             private val clickListener: (video: YouTubeVideo) -> Unit,
                              private val longClickListener: (video: YouTubeVideo) -> Unit)
     : RecyclerView.Adapter<YouTubeRecyclerAdapter.YouTubeHolder>() {
 
@@ -42,6 +43,9 @@ class YouTubeRecyclerAdapter(val items: List<YouTubeVideo>,
             .inflate(R.layout.item_youtube_video, parent, false)
         val viewHolder = YouTubeHolder(layout)
 
+        layout.setOnClickListener {
+            clickListener.invoke(items[viewHolder.adapterPosition])
+        }
         layout.setOnLongClickListener {
             longClickListener.invoke(items[viewHolder.adapterPosition])
             return@setOnLongClickListener true

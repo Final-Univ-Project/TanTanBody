@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -51,15 +52,23 @@ class TabYoutubeFragment : Fragment() {
         })
 
         YTListRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@TabYoutubeFragment.context)
-            adapter = YouTubeRecyclerAdapter(YTList) { video ->
-                Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
-                buildSettingFavDialog(video, video.isFaverite).show()
+            layoutManager = LinearLayoutManager(context)
+            adapter = YouTubeRecyclerAdapter(
+                YTList,
+                clickListener = { video ->
+                    Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
+                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video.videoId)::class.java)
+                    startActivity(intent)
+                },
+                longClickListener = { video ->
+                    Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
+                    buildSettingFavDialog(video, video.isFaverite).show()
 
-                model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
-                    YTList = videos
-                })
-            }
+                    model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
+                        YTList = videos
+                    })
+                }
+            )
         }
         return layout
     }
