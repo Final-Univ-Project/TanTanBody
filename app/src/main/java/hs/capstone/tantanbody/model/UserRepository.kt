@@ -72,14 +72,10 @@ class UserRepository {
     fun checkIsSignedUser(user: UserDto) {
         userDto = user
 
-        val code = saveUser().value // 등록된 사용자인지 확인
-        Log.e(TAG, "code : ${code}")
-        if (code == "OK") {
-            val registeredUser = getUsers()
-            // TODO. registeredUser.value.userGoal 가져와 저장하기
-            Log.e(TAG, "등록된 사용자인 경우 ${user.userEmail}")
-        } else {
-            Log.e(TAG, "최초 로그인 인 경우 ${user.userEmail}")
+        if (saveUserData(user)) { // 등록O or 새로 등록O
+            Log.e(TAG, "사용자 등록 서버통신이 이루어졌습니다!")
+        } else { // NW오류
+            Log.e(TAG, "서버통신 중에 오류가 발견되었습니다!")
         }
     }
 
@@ -88,19 +84,25 @@ class UserRepository {
      *
      * 신규 회원인지 아니면 있는 회원인지 그냥 관례상(?) 확인 하기
      */
-    val data0 = MutableLiveData<String>()
-    fun saveUser(): MutableLiveData<String>{
+    fun saveUserData(user: UserDto): Boolean {
         val call = RetrofitClient.myTestClientService
-        call.saveUser().enqueue(object : Callback<String> {
+        var isCompleted = true
+        call.saveUserData(
+            userEmail = user.userEmail,
+            userName = user.userName,
+            userPhoto = user.userPhoto,
+            userGoal = user.userGoal
+        ).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d("save Users 결과", "성공 : ${response.raw()}")
+                Log.d("saveUserData 결과", "성공 : ${response.raw()}")
                 Log.d("가져온 데이터", "${response.body()}")
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d("save Users 결과", "실패 : $t")
+                Log.d("saveUserData 결과", "실패 : $t")
+                isCompleted = false
             }
         })
-        return data0
+        return isCompleted
     }
 
     val data1 = MutableLiveData<UserDto>()

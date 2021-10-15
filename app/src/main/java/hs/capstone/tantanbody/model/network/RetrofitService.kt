@@ -17,8 +17,14 @@ interface RetrofitService {
     @GET("users")
     fun getUsers(): Call<ArrayList<UserDto>>
 
+    @FormUrlEncoded
     @POST("login")
-    fun saveUser(): Call<String>
+    fun saveUserData(
+        @Field("userEmail") userEmail: String,
+        @Field("userName") userName: String,
+        @Field("photo") userPhoto: String,
+        @Field("goal") userGoal: String?
+    ): Call<String>
 
     //== 식단 화면 ==//
     @GET("diet") //사실상 post로 바꿔야함 ... back도 마찬가지

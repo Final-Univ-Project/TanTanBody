@@ -1,18 +1,17 @@
 package hs.capstone.tantanbody.ui
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -43,9 +42,8 @@ class TabYoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_tab_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
-
-        model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key))
-        YTList = model.youtubeVideos.value ?: mutableListOf()
+        YTList = (model.youtubeVideos.value
+            ?: model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).value)!!
 
         model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
             YTList = videos
@@ -57,8 +55,17 @@ class TabYoutubeFragment : Fragment() {
                 YTList,
                 clickListener = { video ->
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
-                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video.videoId)::class.java)
-                    startActivity(intent)
+                    model.insertClickedYouTube(video = video)
+
+                    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                        if (result.resultCode == Activity.RESULT_OK) {
+                            val received: Intent? = result.data // ?
+
+                            model.insertDoneYouTube(video)
+                        }
+                    }
+                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video)::class.java)
+                    resultLauncher.launch(intent)
                 },
                 longClickListener = { video ->
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")

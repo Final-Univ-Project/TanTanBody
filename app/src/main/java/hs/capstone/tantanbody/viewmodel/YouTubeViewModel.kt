@@ -37,7 +37,7 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     var youtubeVideos = MutableLiveData<MutableList<YouTubeVideo>>()
 
     var favYoutubeVideos: LiveData<MutableList<YouTubeVideo>> = repo.favYoutubeVideos
-
+    var historyExer: MutableMap<String, Long> = mutableMapOf()
 
     fun insertFavYouTubeVideo(video: YouTubeVideo) {
         repo.insertFavYoutubeVideo(video)
@@ -55,9 +55,16 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
 
     fun insertClickedYouTube(video: YouTubeVideo) {
         repo.insertClickedYouTube(Date(), video)
+
+        Log.d(TAG, "[Date.time] Long: ${Date().time}")
+        historyExer.put(video.videoId, Date().time)
     }
     fun insertDoneYouTube(video: YouTubeVideo) {
         repo.insertClickedYouTube(Date(), video)
+
+        val interT = getInterTime(historyExer[video.videoId] ?: 0L, Date().time)
+        historyExer.put(video.videoId, interT.toLong())
+        Log.d(TAG, "[interT] Float: ${interT} Long: ${interT.toLong()}")
     }
     fun getInterTime(inDate: Long, outDate: Long): Float {
         val diffMillies = Math.abs(inDate - outDate)
@@ -91,7 +98,7 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     }
 
     // HTTP를 통해 유튜브 검색 목록 가져오는 메소드
-    fun loadYouTubeSearchItems(apiKey: String) {
+    fun loadYouTubeSearchItems(apiKey: String): MutableLiveData<MutableList<YouTubeVideo>> {
         if (youtubeVideos.value != null) {
             // 추가로 영상load
         }
@@ -113,6 +120,7 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
             Log.e(TAG, "[Throwed error]: ${t.message}")
             t.printStackTrace()
         }
+        return youtubeVideos
     }
     suspend fun buildYouTubeSearchItems(query: String = "운동", apiKey: String) = scope.async {
         youtube = YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HttpRequestInitializer {

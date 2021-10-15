@@ -1,5 +1,9 @@
 package hs.capstone.tantanbody.ui
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -9,6 +13,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 import hs.capstone.tantanbody.R
+import hs.capstone.tantanbody.model.data.YouTubeVideo
 
 class YoutubeVideoActivity : YouTubeBaseActivity() {
     val TAG = "YoutubeVideoActivity"
@@ -28,7 +33,7 @@ class YoutubeVideoActivity : YouTubeBaseActivity() {
                 p1: YouTubePlayer?,
                 p2: Boolean
             ) {
-                p1?.loadVideo(videoId)
+                p1?.loadVideo(video.videoId)
                 Log.d(TAG, "isPlaying: ${p1?.isPlaying} p2: ${p2}")
             }
 
@@ -44,10 +49,36 @@ class YoutubeVideoActivity : YouTubeBaseActivity() {
         fullscreenVideo.initialize(apiKey, youtubePlayerInit)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        buildDoneDialog().show()
+    }
+
+    fun buildDoneDialog(): AlertDialog.Builder {
+        val doneDlg: AlertDialog.Builder = AlertDialog.Builder(
+            baseContext,
+            android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
+        )
+        doneDlg.setTitle("운동을 마치겠어요?")
+        doneDlg.setNegativeButton("취소", null)
+        doneDlg.setPositiveButton("확인",
+            // 운동을 마치고, 영상목록 화면으로 돌아가면
+            DialogInterface.OnClickListener { dialog, which ->
+                setResult(Activity.RESULT_OK, Intent())
+            }
+        )
+        return doneDlg
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setResult(Activity.RESULT_OK, Intent())
+    }
+
     companion object {
-        lateinit var videoId: String
-        fun newInstance(videoId: String): YouTubeBaseActivity {
-            this.videoId = videoId
+        lateinit var video: YouTubeVideo
+        fun newInstance(video: YouTubeVideo): YouTubeBaseActivity {
+            this.video = video
             return YoutubeVideoActivity()
         }
     }
