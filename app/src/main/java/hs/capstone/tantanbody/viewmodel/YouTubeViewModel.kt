@@ -1,8 +1,6 @@
 package hs.capstone.tantanbody.viewmodel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +22,6 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.text.SimpleDateFormat
 import java.util.*
 
 class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
@@ -39,19 +36,23 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     var favYoutubeVideos: LiveData<MutableList<YouTubeVideo>> = repo.favYoutubeVideos
     var historyExer: MutableMap<String, Long> = mutableMapOf()
 
+    // 즐겨찾기 운동영상 추가
     fun insertFavYouTubeVideo(video: YouTubeVideo) {
         repo.insertFavYoutubeVideo(video)
     }
+    // 즐겨찾기 운동영상 삭제
     fun deleteFavYouTubeVideo(video: YouTubeVideo) {
         repo.removeFavYouTubeVideo(video)
     }
 
+    // 클릭한 운동영상 추가
     fun insertClickedYouTube(video: YouTubeVideo) {
         repo.insertClickedYouTube(Date(), video)
 
         Log.d(TAG, "[Date.time] Long: ${Date().time}")
         historyExer.put(video.videoId, Date().time)
     }
+    // 운동을 마친 운동영상 추가
     fun insertDoneYouTube(video: YouTubeVideo) {
         repo.insertClickedYouTube(Date(), video)
 
@@ -59,6 +60,7 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
         historyExer.put(video.videoId, interT.toLong())
         Log.d(TAG, "[interT] Float: ${interT} Long: ${interT.toLong()}")
     }
+    // 시작~끝 운동시간
     fun getInterTime(inDate: Long, outDate: Long): Float {
         val diffMillies = Math.abs(inDate - outDate)
         val sec = diffMillies/1000
@@ -66,12 +68,14 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
         return "${min}.${sec}".toFloat()
     }
 
+    // 운동영상 형태소분석으로 키워드 반환
     fun getYouTubeVideoKeywords(sentence: String): List<String> {
         var komoran = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence)
         Log.d(TAG, "** sentence: ${sentence}")
         Log.d(TAG, "** nouns: ${komoran.nouns}")
         return komoran.nouns
     }
+    // SearchResult 를 YouTubeVideo 로 변환
     fun bind2YouTubeVideo(results: List<SearchResult>) {
         results.forEach {
             val keywords = getYouTubeVideoKeywords(it.snippet.title)

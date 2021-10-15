@@ -54,20 +54,23 @@ class TabYoutubeFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = YouTubeRecyclerAdapter(
                 YTList,
+                // 클릭 리스너 매개변수
                 clickListener = { video ->
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
                     model.insertClickedYouTube(video = video)
 
-                    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            val received: Intent? = result.data // ?
-
-                            model.insertDoneYouTube(video)
-                        }
-                    }
-                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video)::class.java)
-                    resultLauncher.launch(intent)
+                    // 문제가 많음 ^^
+//                    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//                        if (result.resultCode == Activity.RESULT_OK) {
+//                            val received: Intent? = result.data // ?
+//
+//                            model.insertDoneYouTube(video)
+//                        }
+//                    }
+//                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video)::class.java)
+//                    resultLauncher.launch(intent)
                 },
+                // 롱클릭 리스너 매개변수
                 longClickListener = { video ->
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
                     buildSettingFavDialog(video, video.isFaverite).show()
@@ -87,6 +90,7 @@ class TabYoutubeFragment : Fragment() {
         this.app = context.applicationContext as Application
     }
 
+    // 즐겨찾기 Dialog창 띄움
     fun buildSettingFavDialog(video: YouTubeVideo, isFav: Boolean): AlertDialog.Builder {
         val message = run {
             if (isFav) "즐겨찾기에서 삭제할까요?"

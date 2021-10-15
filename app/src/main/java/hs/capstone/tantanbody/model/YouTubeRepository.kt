@@ -18,6 +18,7 @@ class YouTubeRepository(val userEmail: String) {
     var exerciseYouTubeVideos: MutableLiveData<MutableList<YouTubeVideo>> =
         loadExercisedVideos() as MutableLiveData<MutableList<YouTubeVideo>>
 
+    // 즐겨찾기한 영상 가져오기
     fun loadFavYouTubeVideo() {
         // TODO. MutableLiveData<MutableList<YouTubeVideo>> 로 반환
         //       or List<YouTubeVideo>로 반환
@@ -42,22 +43,27 @@ class YouTubeRepository(val userEmail: String) {
             }
         })
     }
+    // 즐겨찾기 영상 추가
     fun insertFavYoutubeVideo(video: YouTubeVideo) {
         Log.d(TAG, "insert videoId: ${video.videoId}")
         favYoutubeVideos.value?.add(video)
     }
+    // 즐겨찾기 영상 삭제
     fun removeFavYouTubeVideo(video: YouTubeVideo) {
         // 나중에 서버 연결되면, 그냥 서버에 삭제명령 전달하는 식으로
         Log.d(TAG, "remove videoId: ${video.videoId}")
         favYoutubeVideos.value?.remove(video)
     }
 
+    // 운동한 영상 키워드 가져오기
     fun loadExercisedVideos() = liveData<MutableList<YouTubeVideo>>{
         emit(mutableListOf())
     }
+    // 클릭한 운동영상 추가
     fun insertClickedYouTube(now: Date, video: YouTubeVideo) {
         Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
     }
+    // 운동을 마친 운동영상 추가
     fun insertDoneYouTube(now: Date, video: YouTubeVideo) {
         Log.d(TAG, "now: ${now} videoId: ${video.videoId}")
     }

@@ -21,19 +21,26 @@ class UserRepository {
     var userWeights: MutableLiveData<MutableMap<String, Float>> =
         loadUserWeights() as MutableLiveData<MutableMap<String, Float>>
 
+    // 운동목표 가져오기
     fun loadGoal() = liveData<String> {
         ""
     }
+    // 운동 목표 설정
     fun setGoal(goal: String) {
         this.goal.value = goal
+        // TODO. 서버에도 운동목표 추가
     }
+    // 운동 목표 삭제
     fun deleteGoal() {
         this.goal.value = ""
+        // TODO. 서버에도 운동목표 삭제
     }
 
+    // Date날짜 입력하면, 요일 반환
     fun getWeekdayByDate(date: Long): String {
         return SimpleDateFormat("E", Locale.KOREA).format(Date(date))
     }
+    // 운동한 시간(~일주일) 가져오기
     fun loadExerciseTimes() = liveData<MutableMap<String, Int>> { // check!!!!!
         val dayMillies = 86400000
         // 월~일 고정된 크기의 이번주 운동시간
@@ -48,12 +55,14 @@ class UserRepository {
         ) ?: mutableMapOf())
         Log.e(TAG, "exerciseTimes: ${exerciseTimes.value}")
     }
+    // 운동한 시간 추가
     fun insertExerciseTime(date: Date, minute: Int) {
         this.exerciseTimes.value
         // 같은 날짜면 업데이트, 없으면 추가
         Log.d(TAG, "date: ${date}, minute: ${minute}")
     }
 
+    // 사용자 몸무게 기록(~일주일) 가져오기
     fun loadUserWeights() = liveData<MutableMap<String, Float>> {
         val dayMillies = 86400000
         emit(mutableMapOf<String, Float>(
@@ -64,11 +73,13 @@ class UserRepository {
         ) ?: mutableMapOf())
         Log.e(TAG, "exerciseTimes: ${userWeights.value}")
     }
+    // 사용자 몸무게 기록 추가
     fun insertWeight(date: Date, kg: Float) {
         userWeights.value?.put(getWeekdayByDate(date.time), kg)
         Log.d(TAG, "date: ${date.time}, kg: ${kg.toDouble()}")
     }
 
+    // 사용자 등록 및 서버통신 확인
     fun checkIsSignedUser(user: UserDto) {
         userDto = user
 
