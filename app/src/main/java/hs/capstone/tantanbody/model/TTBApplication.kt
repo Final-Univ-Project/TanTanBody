@@ -14,8 +14,8 @@ class TTBApplication : Application() {
     val database by lazy { TTBDatabase.getDatabase(this, appScope) }
 
     // Repository 인스턴스 생성
-    val userRepository by lazy { UserRepository() }
-    val youtubeRepository by lazy { YouTubeRepository() }
+    val userRepository = UserRepository()
+    val youtubeRepository by lazy { YouTubeRepository(userRepository.userDto!!.userEmail) }
     val mealRepository by lazy {}
 
     override fun onCreate() {

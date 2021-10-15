@@ -42,6 +42,7 @@ class TabYoutubeFragment : Fragment() {
         var layout = inflater.inflate(R.layout.fragment_tab_youtube, container, false)
         YTListRecyclerView = layout.findViewById(R.id.YTListRecyclerView)
 
+        model.favYoutubeVideos
         YTList = (model.youtubeVideos.value
             ?: model.loadYouTubeSearchItems(apiKey = getString(R.string.youtube_api_key)).value)!!
 

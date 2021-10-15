@@ -3,18 +3,44 @@ package hs.capstone.tantanbody.model
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import hs.capstone.tantanbody.model.data.UserDto
 import hs.capstone.tantanbody.model.data.YouTubeVideo
+import hs.capstone.tantanbody.model.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Response
 import java.util.*
+import javax.security.auth.callback.Callback
 
-class YouTubeRepository {
+class YouTubeRepository(val userEmail: String) {
     val TAG = "YouTubeRepository"
     var favYoutubeVideos: MutableLiveData<MutableList<YouTubeVideo>> =
         loadFavYouTubeVideo() as MutableLiveData<MutableList<YouTubeVideo>>
     var exerciseYouTubeVideos: MutableLiveData<MutableList<YouTubeVideo>> =
         loadExercisedVideos() as MutableLiveData<MutableList<YouTubeVideo>>
 
-    fun loadFavYouTubeVideo() = liveData<MutableList<YouTubeVideo>> {
-        emit(mutableListOf())
+    fun loadFavYouTubeVideo() {
+        // TODO. MutableLiveData<MutableList<YouTubeVideo>> 로 반환
+        //       or List<YouTubeVideo>로 반환
+        val call = RetrofitClient.myTestClientService
+        lateinit var result: List<YouTubeVideo>
+        call.getFavExercise(
+            userEmail = userEmail
+        ).enqueue(object : retrofit2.Callback<List<YouTubeVideo>> {
+            override fun onResponse(
+                call: Call<List<YouTubeVideo>>,
+                response: Response<List<YouTubeVideo>>
+            ) {
+                Log.d(TAG, "isSuccessful: ${response.isSuccessful}")
+                Log.d(TAG, "response: ${response.body()}")
+
+                if (response.isSuccessful) {
+                    result = response.body()!!
+                }
+            }
+            override fun onFailure(call: Call<List<YouTubeVideo>>, t: Throwable) {
+                Log.e(TAG, "error: $t")
+            }
+        })
     }
     fun insertFavYoutubeVideo(video: YouTubeVideo) {
         Log.d(TAG, "insert videoId: ${video.videoId}")

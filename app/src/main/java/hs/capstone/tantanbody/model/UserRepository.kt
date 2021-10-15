@@ -105,21 +105,6 @@ class UserRepository {
         return isCompleted
     }
 
-    val data1 = MutableLiveData<UserDto>()
-    fun getUsers(): MutableLiveData<UserDto>{
-        val call = RetrofitClient.myTestClientService
-        call.getUsers().enqueue(object : Callback<ArrayList<UserDto>> {
-            override fun onResponse(call: Call<ArrayList<UserDto>>, response: Response<ArrayList<UserDto>>) {
-                Log.d("get Users 결과", "성공 : ${response.raw()}")
-                Log.d("가져온 데이터", "${response.body()}")
-            }
-            override fun onFailure(call: Call<ArrayList<UserDto>>, t: Throwable) {
-                Log.d("get Users 결과", "실패 : $t")
-            }
-        })
-        return data1
-    }
-
     /**
      * 사용자가 작성했던 식단 리스트를 가져옴
      *

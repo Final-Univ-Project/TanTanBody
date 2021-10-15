@@ -41,16 +41,9 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
 
     fun insertFavYouTubeVideo(video: YouTubeVideo) {
         repo.insertFavYoutubeVideo(video)
-
-        youtubeVideos.value?.
-        filter { item -> item.videoId == video.videoId }?.
-        forEach {
-            it.isFaverite = true
-        }
     }
     fun deleteFavYouTubeVideo(video: YouTubeVideo) {
         repo.removeFavYouTubeVideo(video)
-
     }
 
     fun insertClickedYouTube(video: YouTubeVideo) {
