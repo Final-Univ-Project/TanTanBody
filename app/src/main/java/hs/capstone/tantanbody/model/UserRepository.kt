@@ -2,9 +2,11 @@ package hs.capstone.tantanbody.model
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import hs.capstone.tantanbody.model.data.*
 import hs.capstone.tantanbody.model.network.RetrofitClient
+import kotlinx.coroutines.flow.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,24 +17,24 @@ import kotlin.collections.ArrayList
 class UserRepository {
     val TAG = "UserRepository"
     var userDto: UserDto ?= null
-    var goal: MutableLiveData<String> = loadGoal() as MutableLiveData<String>
-    var exerciseTimes: MutableLiveData<MutableMap<String, Int>> =
-        loadExerciseTimes() as MutableLiveData<MutableMap<String, Int>>
-    var userWeights: MutableLiveData<MutableMap<String, Float>> =
-        loadUserWeights() as MutableLiveData<MutableMap<String, Float>>
+    var goal: Flow<String> = loadGoal()
+    var exerciseTimes: Flow<MutableMap<String, Int>> = loadExerciseTimes()
+    var userWeights: Flow<MutableMap<String, Float>> = loadUserWeights()
 
     // 운동목표 가져오기
-    fun loadGoal() = liveData<String> {
-        ""
+    fun loadGoal() = flow<String> {
+        Log.e(TAG, "load goal")
+        emit("가져온 운동목표")
     }
     // 운동 목표 설정
     fun setGoal(goal: String) {
-        this.goal.value = goal
+        this.goal = flowOf(goal)
         // TODO. 서버에도 운동목표 추가
+        Log.e(TAG, "set goal: ${this.goal}")
     }
     // 운동 목표 삭제
     fun deleteGoal() {
-        this.goal.value = ""
+        this.goal = emptyFlow()
         // TODO. 서버에도 운동목표 삭제
     }
 
@@ -41,7 +43,7 @@ class UserRepository {
         return SimpleDateFormat("E", Locale.KOREA).format(Date(date))
     }
     // 운동한 시간(~일주일) 가져오기
-    fun loadExerciseTimes() = liveData<MutableMap<String, Int>> { // check!!!!!
+    fun loadExerciseTimes() = flow<MutableMap<String, Int>> {
         val dayMillies = 86400000
         // 월~일 고정된 크기의 이번주 운동시간
         emit(mutableMapOf<String, Int>(
@@ -53,17 +55,19 @@ class UserRepository {
             getWeekdayByDate(Date(Date().time - dayMillies).time) to 26,
             getWeekdayByDate(Date().time) to 18
         ) ?: mutableMapOf())
-        Log.e(TAG, "exerciseTimes: ${exerciseTimes.value}")
+        Log.e(TAG, "exerciseTimes: ${exerciseTimes}")
     }
     // 운동한 시간 추가
-    fun insertExerciseTime(date: Date, minute: Int) {
-        this.exerciseTimes.value
+    suspend fun insertExerciseTime(date: Date, minute: Int) {
+        this.exerciseTimes.collect { mins ->
+            mins.put(getWeekdayByDate(date.time), minute)
+        }
         // 같은 날짜면 업데이트, 없으면 추가
         Log.d(TAG, "date: ${date}, minute: ${minute}")
     }
 
     // 사용자 몸무게 기록(~일주일) 가져오기
-    fun loadUserWeights() = liveData<MutableMap<String, Float>> {
+    fun loadUserWeights() = flow<MutableMap<String, Float>> {
         val dayMillies = 86400000
         emit(mutableMapOf<String, Float>(
             getWeekdayByDate(Date(Date().time - dayMillies*4).time) to 45f,
@@ -71,11 +75,13 @@ class UserRepository {
             getWeekdayByDate(Date(Date().time - dayMillies*2).time) to 54.8f,
             getWeekdayByDate(Date(Date().time - dayMillies).time) to 48f
         ) ?: mutableMapOf())
-        Log.e(TAG, "exerciseTimes: ${userWeights.value}")
+        Log.e(TAG, "exerciseTimes: ${userWeights}")
     }
     // 사용자 몸무게 기록 추가
-    fun insertWeight(date: Date, kg: Float) {
-        userWeights.value?.put(getWeekdayByDate(date.time), kg)
+    suspend fun insertWeight(date: Date, kg: Float) {
+        this.userWeights.collect { kgs ->
+            kgs.put(getWeekdayByDate(date.time), kg)
+        }
         Log.d(TAG, "date: ${date.time}, kg: ${kg.toDouble()}")
     }
 
@@ -105,12 +111,14 @@ class UserRepository {
             userGoal = user.userGoal
         ).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d("saveUserData 결과", "성공 : ${response.raw()}")
-                Log.d("가져온 데이터", "${response.body()}")
+                Log.d(TAG, "성공 : ${response.raw()}")
+                Log.d(TAG, "${response.body()}")
+                setGoal(response.body() ?: "nullㅇㅣㅁ")
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d("saveUserData 결과", "실패 : $t")
+                Log.e(TAG, "실패 : $t")
                 isCompleted = false
+                setGoal(call.isExecuted.toString())
             }
         })
         return isCompleted
