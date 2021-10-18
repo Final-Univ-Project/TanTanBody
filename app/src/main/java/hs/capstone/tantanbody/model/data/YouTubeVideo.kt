@@ -12,5 +12,5 @@ data class YouTubeVideo(
     val thumbnail: String,
     val channelTitle: String?,
     var isFaverite: Boolean = false,
-    var keywords: List<String>? = null
+    var keywords: String? = null
 )

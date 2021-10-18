@@ -48,32 +48,29 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     // 클릭한 운동영상 추가
     fun insertClickedYouTube(video: YouTubeVideo) {
         repo.insertClickedYouTube(Date(), video)
-
-        Log.d(TAG, "[Date.time] Long: ${Date().time}")
+        // 운동시작 시간 기록
         historyExer.put(video.videoId, Date().time)
     }
     // 운동을 마친 운동영상 추가
     fun insertDoneYouTube(video: YouTubeVideo) {
-        repo.insertClickedYouTube(Date(), video)
+        repo.insertDoneYouTube(Date(), video)
 
-        val interT = getInterTime(historyExer[video.videoId] ?: 0L, Date().time)
+        // 운동끝시간과 같이 운동시간 계산
+        // TODO. (프론트) 예외 및 오류처리
+        val interT = getInterTime(historyExer[video.videoId]!!, Date().time)
         historyExer.put(video.videoId, interT.toLong())
-        Log.d(TAG, "[interT] Float: ${interT} Long: ${interT.toLong()}")
     }
     // 시작~끝 운동시간
-    fun getInterTime(inDate: Long, outDate: Long): Float {
+    fun getInterTime(inDate: Long, outDate: Long): Int {
         val diffMillies = Math.abs(inDate - outDate)
-        val sec = diffMillies/1000
-        val min = sec/60
-        return "${min}.${sec}".toFloat()
+//        val sec = diffMillies/1000
+        return (diffMillies/60000).toInt() // min
     }
 
     // 운동영상 형태소분석으로 키워드 반환
-    fun getYouTubeVideoKeywords(sentence: String): List<String> {
-        var komoran = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence)
-        Log.d(TAG, "** sentence: ${sentence}")
-        Log.d(TAG, "** nouns: ${komoran.nouns}")
-        return komoran.nouns
+    fun getYouTubeVideoKeywords(sentence: String): String {
+        val komoraNouns = Komoran(DEFAULT_MODEL.LIGHT).analyze(sentence).nouns
+        return komoraNouns.joinToString(" #", "#", "", 30, "...")
     }
     // SearchResult 를 YouTubeVideo 로 변환
     fun bind2YouTubeVideo(results: List<SearchResult>) {
@@ -93,11 +90,12 @@ class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
             ))
         }
     }
+    // TODO. (프론트) 추가로 영상 가져오기
 
     // HTTP를 통해 유튜브 검색 목록 가져오는 메소드
     fun loadYouTubeSearchItems(apiKey: String): MutableLiveData<MutableList<YouTubeVideo>> {
         if (youtubeVideos.value != null) {
-            // 추가로 영상load
+            return youtubeVideos
         }
 
         try {

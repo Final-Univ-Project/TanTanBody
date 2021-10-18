@@ -33,11 +33,10 @@ class WeightGraphFragment : Fragment() {
         for (i in 0..6) {
             entries.add(Entry(
                 i.toFloat(),
+                // 데이터가 없으면 0으로 채움
                 (weights[axis_labels[i]] ?: 0).toFloat())
             )
         }
-        Log.d(TAG, "weights: ${weights}")
-        Log.d(TAG, "entries: ${entries}")
 
         // LineChart 설정하기
         var DSline = LineDataSet(entries, getString(R.string.graph_label_weight))

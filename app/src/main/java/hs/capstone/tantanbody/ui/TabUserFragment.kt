@@ -55,14 +55,17 @@ class TabUserFragment : Fragment() {
         model.goal.observe(viewLifecycleOwner, Observer { goal ->
             setGoalBriefUI(goal)
             layout.invalidate()
+            layout.refreshDrawableState()
         })
         model.exerciseTimes.observe(viewLifecycleOwner, Observer { mins ->
             minutes = mins
             layout.invalidate()
+            layout.refreshDrawableState()
         })
         model.userWeights.observe(viewLifecycleOwner, Observer { kgs ->
             weights = kgs
             layout.invalidate()
+            layout.refreshDrawableState()
         })
 
         goalTitleTv.setOnClickListener {

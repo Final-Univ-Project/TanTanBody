@@ -32,11 +32,10 @@ class ExerciseGraphFragment : Fragment() {
         for (i in 0..6) {
             entries.add(BarEntry(
                 i.toFloat(),
+                // 데이터가 없으면 0으로 채움
                 (exercises[axis_labels[i]] ?: 0).toFloat())
             )
         }
-        Log.d(TAG, "exercises: ${exercises}")
-        Log.d(TAG, "entries: ${entries}")
 
         // BarChart 설정하기
         var DSbar = BarDataSet(entries, getString(R.string.graph_label_exercise))

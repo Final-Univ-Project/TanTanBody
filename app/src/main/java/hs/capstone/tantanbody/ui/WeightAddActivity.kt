@@ -51,11 +51,8 @@ class WeightAddActivity : AppCompatActivity() {
 
         setWeightBtn.setOnClickListener {
             val weight = "${weightPicker.value}.${weightDecimalPicker.value}".toFloat()
-            Log.d(TAG, "weightPicker: ${weightPicker.value}")
-            Log.d(TAG, "weightDecimalPicker: ${weightDecimalPicker.value}")
-            Log.d(TAG, "weight: ${weight}")
-
             model.insertWeight(weight)
+
             val intent = Intent(baseContext, MainActivity::class.java)
             startActivity(intent)
         }

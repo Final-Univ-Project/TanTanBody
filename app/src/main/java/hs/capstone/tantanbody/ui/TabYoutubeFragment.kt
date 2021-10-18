@@ -75,9 +75,9 @@ class TabYoutubeFragment : Fragment() {
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
                     buildSettingFavDialog(video, video.isFaverite).show()
 
-                    model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
-                        YTList = videos
-                    })
+//                    model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
+//                        YTList = videos
+//                    })
                 }
             )
         }
