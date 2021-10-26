@@ -42,7 +42,7 @@ class UserRepository {
         }
     }
     fun loadUserData() {
-        // (서버) 유저 운동목표,시간,몸무게 가져오기
+        // TODO. (서버) 유저 운동목표,시간,몸무게 가져오기 (빨리)
         loadGoal()
         loadExerciseTimes()
         loadUserWeights()
@@ -50,7 +50,7 @@ class UserRepository {
 
     // 운동목표 가져오기
     fun loadGoal() {
-        goal.value = "init"
+        goal = flow { emit("init") }.asLiveData() as MutableLiveData<String>
     }
     // 운동 목표 설정
     fun setGoal(goal: String) {

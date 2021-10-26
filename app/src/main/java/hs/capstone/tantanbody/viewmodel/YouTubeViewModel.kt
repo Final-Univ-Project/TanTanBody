@@ -26,15 +26,15 @@ import java.util.*
 
 class YouTubeViewModel(private val repo: YouTubeRepository) : ViewModel() {
     val TAG = "YouTubeViewModel"
-    val scope = CoroutineScope(Job() + Dispatchers.Default)
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
     private val HTTP_TRANSPORT: HttpTransport = NetHttpTransport() // HTTP transport
     private val JSON_FACTORY: JsonFactory = JacksonFactory() // JSON factory
     private var NUMBER_OF_VIDEOS_RETURNED: Long = 5 // (페이지당 최대 50)
     private var youtube: YouTube? = null // API 요청할 Youtube object
     var youtubeVideos = MutableLiveData<MutableList<YouTubeVideo>>()
 
-    var favYoutubeVideos: LiveData<MutableList<YouTubeVideo>> = repo.favYoutubeVideos
-    var historyExer: MutableMap<String, Long> = mutableMapOf()
+    val favYoutubeVideos: LiveData<MutableList<YouTubeVideo>> by lazy { repo.favYoutubeVideos }
+    val historyExer: MutableMap<String, Long> by lazy { mutableMapOf() }
 
     // 즐겨찾기 운동영상 추가
     fun insertFavYouTubeVideo(video: YouTubeVideo) {

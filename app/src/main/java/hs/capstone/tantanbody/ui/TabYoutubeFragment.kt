@@ -59,25 +59,15 @@ class TabYoutubeFragment : Fragment() {
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
                     model.insertClickedYouTube(video = video)
 
-                    // 문제가 많음 ^^
-//                    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//                        if (result.resultCode == Activity.RESULT_OK) {
-//                            val received: Intent? = result.data // ?
-//
-//                            model.insertDoneYouTube(video)
-//                        }
-//                    }
-//                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video)::class.java)
-//                    resultLauncher.launch(intent)
+                    // TODO. 클릭하면 운동시작 기록하기 (서버?프론트?)
+                    val intent = Intent(context, YoutubeVideoActivity.newInstance(video)::class.java)
+                    startActivity(intent)
                 },
                 // 롱클릭 리스너 매개변수
                 longClickListener = { video ->
                     Log.d(TAG, "videoId: ${video.videoId} title: ${video.title}")
+                    // 즐겨찾기 dialog 보여줌
                     buildSettingFavDialog(video, video.isFaverite).show()
-
-//                    model.youtubeVideos.observe(viewLifecycleOwner, Observer { videos ->
-//                        YTList = videos
-//                    })
                 }
             )
         }

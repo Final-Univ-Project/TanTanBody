@@ -11,10 +11,10 @@ import java.util.*
 
 class UserViewModel(val repo: UserRepository) : ViewModel() {
     val TAG = "UserViewModel"
-    val loginUser: UserDto? = repo.userDto
-    var goal: MutableLiveData<String> = repo.goal
-    var exerciseTimes: MutableLiveData<MutableMap<String, Int>> = repo.exerciseTimes
-    var userWeights: MutableLiveData<MutableMap<String, Float>> = repo.userWeights
+    val loginUser: UserDto? by lazy { repo.userDto }
+    val goal: MutableLiveData<String> by lazy { repo.goal }
+    val exerciseTimes: MutableLiveData<MutableMap<String, Int>> by lazy { repo.exerciseTimes }
+    val userWeights: MutableLiveData<MutableMap<String, Float>> by lazy { repo.userWeights }
 
     // 뷰모델에서 liveData observe하기
     val obrGoal = Observer<String> { goal.value = it }
@@ -28,6 +28,7 @@ class UserViewModel(val repo: UserRepository) : ViewModel() {
     override fun onCleared() {
         repo.goal.removeObserver(obrGoal)
         repo.exerciseTimes.removeObserver(obrMinutes)
+        repo.userWeights.removeObserver(obrKgs)
         super.onCleared()
     }
 
