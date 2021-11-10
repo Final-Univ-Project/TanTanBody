@@ -7,5 +7,6 @@ data class UserDto(
      */
     val userEmail: String,
     val userName: String,
-    val userPhoto: String
+    val userPhoto: String,
+    val userGoal: String?
 )

@@ -1,11 +1,10 @@
 package hs.capstone.tantanbody.model.network
 
-import hs.capstone.tantanbody.model.data.DietDto
-import hs.capstone.tantanbody.model.data.FoodDto
-import hs.capstone.tantanbody.model.data.RecentFoodDto
-import hs.capstone.tantanbody.model.data.UserDto
+import hs.capstone.tantanbody.model.data.*
 import retrofit2.Call
 import retrofit2.http.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 서버에서 호출할 메소드를 선언하는 인터페이스
@@ -14,11 +13,37 @@ import retrofit2.http.*
 interface RetrofitService {
 
     //== 로그인 화면 ==//
-    @GET("users")
-    fun getUsers(): Call<ArrayList<UserDto>>
-
+    @FormUrlEncoded
     @POST("login")
-    fun saveUser(): Call<String>
+    fun saveUserData(
+        @Field("userEmail") userEmail: String,
+        @Field("userName") userName: String,
+        @Field("photo") userPhoto: String,
+        @Field("goal") userGoal: String?
+    ): Call<String>
+
+    //== 기록 화면 ==//
+    fun getGoal(
+        @Field("userEmail") userEmail: String
+    ): Call<String>
+
+    //== 운동 화면 ==//
+    // UserDto에서 ?(nullable)가 붙으면, 고칠코드가 많아요
+    // 그래서 그냥 이메일String으로 전송하도록 해주세요
+    fun getFavExercise(
+        @Field("userEmail") userEmail: String
+    ): Call<List<YouTubeVideo>>
+
+    //
+    fun saveVideo(
+        @Field("videoId") videoId: String,
+        @Field("uploadDate") publishedAt: Date,
+        @Field("videoTitle") title: String,
+        @Field("") description: String,
+        @Field("thumbnail") thumbnail: String,
+        @Field("") channelTitle: String,
+        @Field("") keyworks: List<String>
+    ): Call<List<String>>
 
     //== 식단 화면 ==//
     @GET("diet") //사실상 post로 바꿔야함 ... back도 마찬가지

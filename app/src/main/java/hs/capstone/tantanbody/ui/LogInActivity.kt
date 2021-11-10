@@ -82,7 +82,8 @@ class LogInActivity: Activity() {
             app.userRepository.checkIsSignedUser(UserDto(
                 userEmail = account.email,
                 userName = account.displayName,
-                userPhoto = account.photoUrl.toString()
+                userPhoto = account.photoUrl.toString(),
+                userGoal = ""
             ))
 
             val intent = Intent(this@LogInActivity, MainActivity::class.java)

@@ -29,7 +29,7 @@ class YouTubeRecyclerAdapter(val items: List<YouTubeVideo>,
             if (video.isFaverite) {
                 isFavView.visibility = View.VISIBLE
             }
-            keywords.text = video.keywords?.joinToString(" #", "#", "", 30, "...")
+            keywords.text = video.keywords
 
             titleView.text = video.title
             channelTitleView.text = video.channelTitle

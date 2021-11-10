@@ -33,8 +33,8 @@ class TabUserFragment : Fragment() {
     private val model by viewModels<UserViewModel> {
         UserViewModelFactory((app as TTBApplication).userRepository)
     }
-    private lateinit var userWeights: Map<String, Float>
-    private lateinit var userExercises: Map<String, Int>
+    var minutes: MutableMap<String, Int> = mutableMapOf()
+    var weights: MutableMap<String, Float> = mutableMapOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,29 +54,31 @@ class TabUserFragment : Fragment() {
 
         model.goal.observe(viewLifecycleOwner, Observer { goal ->
             setGoalBriefUI(goal)
-        })
-        model.userWeights.observe(viewLifecycleOwner, Observer { kgs ->
-            userWeights = kgs
+            layout.invalidate()
         })
         model.exerciseTimes.observe(viewLifecycleOwner, Observer { mins ->
-            userExercises = mins
+            minutes = mins
+            layout.invalidate()
+            layout.refreshDrawableState()
         })
-
-        userWeights = model.userWeights.value ?: mapOf()
-        userExercises = model.exerciseTimes.value ?: mapOf()
+        model.userWeights.observe(viewLifecycleOwner, Observer { kgs ->
+            weights = kgs
+            layout.invalidate()
+            layout.refreshDrawableState()
+        })
 
         goalTitleTv.setOnClickListener {
             buildEditingGoalDialog().show()
             Log.d(TAG, "R.id.goalTitle 클릭")
         }
         exerciseGraphTitle.setOnClickListener {
-            loadGraphFragment(ExerciseGraphFragment.newInstance(userExercises))
+            loadGraphFragment(ExerciseGraphFragment.newInstance(minutes))
             exerciseGraphTitle.setTextColor(getColorFrom(R.color.using_content))
             weightGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
             Log.d(TAG, "R.id.recordFitnessGraph 클릭")
         }
         weightGraphTitle.setOnClickListener {
-            loadGraphFragment(WeightGraphFragment.newInstance(userWeights))
+            loadGraphFragment(WeightGraphFragment.newInstance(weights))
             weightGraphTitle.setTextColor(getColorFrom(R.color.using_content))
             exerciseGraphTitle.setTextColor(getColorFrom(R.color.unused_content))
             Log.d(TAG, "R.id.recordWeightGraph 클릭")
@@ -87,7 +89,6 @@ class TabUserFragment : Fragment() {
         }
 
         exerciseGraphTitle.performClick()
-        setGoalBriefUI(model.goal.value ?: "")
         return layout
     }
 

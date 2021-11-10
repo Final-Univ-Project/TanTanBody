@@ -12,15 +12,5 @@ data class YouTubeVideo(
     val thumbnail: String,
     val channelTitle: String?,
     var isFaverite: Boolean = false,
-    var keywords: List<String>? = null
-) {
-    override fun toString(): String {
-        return "  videoId: ${videoId}\n" +
-                " publishedAt: ${publishedAt}\n" +
-                " channelId: ${channelId}\n" +
-                " title: ${title}\n" +
-                " description: ${description}\n" +
-                " thumbnail: ${thumbnail}\n" +
-                " channelTitle: ${channelTitle}\n"
-    }
-}
+    var keywords: String? = null
+)
